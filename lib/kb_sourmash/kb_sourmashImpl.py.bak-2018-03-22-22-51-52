@@ -21,8 +21,8 @@ class kb_sourmash:
     # the latter method is running.
     ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "8002280c5b5730018cd6768195ad457918da5c0b"
+    GIT_URL = ""
+    GIT_COMMIT_HASH = ""
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -36,9 +36,9 @@ class kb_sourmash:
         pass
 
 
-    def run_sourmash(self, ctx, params):
+    def run_sourmash(self, ctx, SourmashParams):
         """
-        :param params: instance of type "SourmashParams" (Insert your
+        :param SourmashParams: instance of type "SourmashParams" (Insert your
            typespec information here.) -> structure: parameter
            "input_assembly_upa" of String, parameter "workspace_name" of
            String
@@ -46,60 +46,31 @@ class kb_sourmash:
            "report_name" of String, parameter "report_ref" of String
         """
         # ctx is the context object
-        # return variables are: results
+        # return variables are: returnVal
         #BEGIN run_sourmash
-
-        run_dir = "/kb/module/test/data/"
 
         print("quick test of sourmash\n")
         # make index
         print("Making sourmash index:\n")
-        sourmash_index_cmd = [self.SOURMASH, 'index', '-k', str(31),
-                                'ecolidb', 'ecoli_many_sigs/*.sig']
+        sourmash_index_cmd = [self.SOURMASH, 'index', '-k', str(31), 'ecolidb', '/kb/module/test/data/ecoli_many_sigs/*.sig']
 
         print('     ' + ' '.join(sourmash_index_cmd))
 
-        p=subprocess.Popen(" ".join(sourmash_index_cmd), cwd=run_dir, shell=True)
+        p=subprocess.Popen(" ".join(sourmash_index_cmd), cwd="/kb/module", shell=True)
         retcode = p.wait()
 
         if p.returncode != 0:
             raise ValueError('Error running sourmash index, return code: ' + str(retcode) + "\n")
 
-        #make ecoli genome sig
-        print("Making ecoli genome sig.\n")
-        sourmash_compute_cmd = [self.SOURMASH, 'compute', '--scaled', str(2000),
-                                '-k', str(31), 'ecoliMG1655.fa',
-                                '-o', 'ecoli-genome.sig']
-
-        print('     ' + ' '.join(sourmash_compute_cmd))
-        p=subprocess.Popen(" ".join(sourmash_compute_cmd), cwd=run_dir, shell=True)
-        retcode = p.wait()
-
-        if p.returncode != 0:
-            raise ValueError('Error running sourmash compute, return code: ' + str(retcode) + "\n")
-
-        # search using sourmash index
-        sourmash_cmd = [self.SOURMASH, 'search', 'ecoli-genome.sig',
-                        'ecolidb.sbt.json', '-n', str(20) ]
-
-        print("Searching index...\n")
-        print('     ' + ' '.join(sourmash_cmd))
-
-        p=subprocess.Popen(" ".join(sourmash_cmd), cwd=run_dir, shell=True)
-        retcode = p.wait()
-
-        if p.returncode != 0:
-            raise ValueError('Error running sourmash search, return code: ' + str(retcode) + "\n")
-
         results = {'report_name': '', 'report_ref': ''}
         #END run_sourmash
 
         # At some point might do deeper type checking...
-        if not isinstance(results, dict):
+        if not isinstance(returnVal, dict):
             raise ValueError('Method run_sourmash return value ' +
-                             'results is not type dict as required.')
+                             'returnVal is not type dict as required.')
         # return the results
-        return [results]
+        return [returnVal]
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",

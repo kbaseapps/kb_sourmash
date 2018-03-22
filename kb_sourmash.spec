@@ -18,6 +18,6 @@ module kb_sourmash {
         string report_ref;
     } SourmashResults;
 
-    funcdef run_sourmash(SourmashParams)
-        returns(SourmashResults) authentication required;
+    funcdef run_sourmash(SourmashParams params)
+        returns(SourmashResults results) authentication required;
 };

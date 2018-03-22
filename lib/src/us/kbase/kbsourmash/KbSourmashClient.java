@@ -166,14 +166,14 @@ public class KbSourmashClient {
      * <p>Original spec-file function name: run_sourmash</p>
      * <pre>
      * </pre>
-     * @param   arg1   instance of type {@link us.kbase.kbsourmash.SourmashParams SourmashParams}
-     * @return   instance of type {@link us.kbase.kbsourmash.SourmashResults SourmashResults}
+     * @param   params   instance of type {@link us.kbase.kbsourmash.SourmashParams SourmashParams}
+     * @return   parameter "results" of type {@link us.kbase.kbsourmash.SourmashResults SourmashResults}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public SourmashResults runSourmash(SourmashParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public SourmashResults runSourmash(SourmashParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
-        args.add(arg1);
+        args.add(params);
         TypeReference<List<SourmashResults>> retType = new TypeReference<List<SourmashResults>>() {};
         List<SourmashResults> res = caller.jsonrpcCall("kb_sourmash.run_sourmash", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);

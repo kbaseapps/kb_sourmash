@@ -33,9 +33,9 @@ class kb_sourmash(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
-    def run_sourmash(self, SourmashParams, context=None):
+    def run_sourmash(self, params, context=None):
         """
-        :param SourmashParams: instance of type "SourmashParams" (Insert your
+        :param params: instance of type "SourmashParams" (Insert your
            typespec information here.) -> structure: parameter
            "input_assembly_upa" of String, parameter "workspace_name" of
            String
@@ -44,7 +44,7 @@ class kb_sourmash(object):
         """
         return self._client.call_method(
             'kb_sourmash.run_sourmash',
-            [SourmashParams], self._service_ver, context)
+            [params], self._service_ver, context)
 
     def status(self, context=None):
         return self._client.call_method('kb_sourmash.status',

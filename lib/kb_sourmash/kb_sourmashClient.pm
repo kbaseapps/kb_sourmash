@@ -110,7 +110,7 @@ sub new
 
 =head2 run_sourmash
 
-  $return = $obj->run_sourmash($SourmashParams)
+  $results = $obj->run_sourmash($params)
 
 =over 4
 
@@ -119,8 +119,8 @@ sub new
 =begin html
 
 <pre>
-$SourmashParams is a kb_sourmash.SourmashParams
-$return is a kb_sourmash.SourmashResults
+$params is a kb_sourmash.SourmashParams
+$results is a kb_sourmash.SourmashResults
 SourmashParams is a reference to a hash where the following keys are defined:
 	input_assembly_upa has a value which is a string
 	workspace_name has a value which is a string
@@ -134,8 +134,8 @@ SourmashResults is a reference to a hash where the following keys are defined:
 
 =begin text
 
-$SourmashParams is a kb_sourmash.SourmashParams
-$return is a kb_sourmash.SourmashResults
+$params is a kb_sourmash.SourmashParams
+$results is a kb_sourmash.SourmashResults
 SourmashParams is a reference to a hash where the following keys are defined:
 	input_assembly_upa has a value which is a string
 	workspace_name has a value which is a string
@@ -166,10 +166,10 @@ SourmashResults is a reference to a hash where the following keys are defined:
 							       "Invalid argument count for function run_sourmash (received $n, expecting 1)");
     }
     {
-	my($SourmashParams) = @args;
+	my($params) = @args;
 
 	my @_bad_arguments;
-        (ref($SourmashParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"SourmashParams\" (value was \"$SourmashParams\")");
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
 	    my $msg = "Invalid arguments passed to run_sourmash:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
