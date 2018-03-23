@@ -121,7 +121,7 @@ class kb_sourmash:
             print("exception from saving report")
             raise
 
-        results = {'report_name': report_info['name'], 'report_ref': report_info['name']}
+        results = {'report_name': report_info['name'], 'report_ref': report_info['ref']}
         #END run_sourmash
 
         # At some point might do deeper type checking...
