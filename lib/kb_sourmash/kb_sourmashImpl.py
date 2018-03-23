@@ -113,7 +113,7 @@ class kb_sourmash:
                 {
                 'message': message,
                 #'objects_created': [],
-                'workspace_name':workspace_name,
+                'workspace_name': workspace_name,
                 #'direct_html_link_index':0,
                 'report_object_name': 'sourmash_report_' + str(uuid.uuid4())
                 })
