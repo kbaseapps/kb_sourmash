@@ -86,6 +86,6 @@ class kb_sourmashTest(unittest.TestCase):
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
-        params = { 'input_assembly_upa': "test" }
+        params = { 'input_assembly_upa': "test", 'workspace_name': self.getWsName()}
         self.getImpl().run_sourmash(self.getContext(), params)
         pass

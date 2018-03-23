@@ -2,6 +2,9 @@
 #BEGIN_HEADER
 import os
 import subprocess
+import uuid
+
+from KBaseReport.KBaseReportClient import KBaseReport
 #END_HEADER
 
 
@@ -32,6 +35,8 @@ class kb_sourmash:
     # be found
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
+        self.scratch = os.path.abspath(config['scratch'])
+        self.callbackURL = os.environ['SDK_CALLBACK_URL']
         #END_CONSTRUCTOR
         pass
 
@@ -48,6 +53,11 @@ class kb_sourmash:
         # ctx is the context object
         # return variables are: results
         #BEGIN run_sourmash
+
+        if 'workspace_name' not in params:
+            raise ValueError('workspace_name parameter is required')
+
+        workspace_name = params['workspace_name']
 
         run_dir = "/kb/module/test/data/"
 
@@ -85,13 +95,33 @@ class kb_sourmash:
         print("Searching index...\n")
         print('     ' + ' '.join(sourmash_cmd))
 
-        p=subprocess.Popen(" ".join(sourmash_cmd), cwd=run_dir, shell=True)
+        p=subprocess.Popen(" ".join(sourmash_cmd), cwd=run_dir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         retcode = p.wait()
 
         if p.returncode != 0:
             raise ValueError('Error running sourmash search, return code: ' + str(retcode) + "\n")
 
-        results = {'report_name': '', 'report_ref': ''}
+        results, err = p.communicate()
+        message = err + "\n" + results
+
+        print("Results\n", results, "\nErr:\n", err)
+
+        #save report
+        kbr = KBaseReport(self.callbackURL)
+        try:
+            report_info = kbr.create_extended_report(
+                {
+                'message': message,
+                'objects_created': [],
+                'workspace_name':workspace_name,
+                #'direct_html_link_index':0,
+                'report_object_name': 'sourmash_report_' + str(uuid.uuid4())
+                })
+        except:
+            print("exception from saving report")
+            raise
+
+        results = {'report_name': report_info['name'], 'report_ref': report_info['name']}
         #END run_sourmash
 
         # At some point might do deeper type checking...
