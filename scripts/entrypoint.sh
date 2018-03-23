@@ -17,6 +17,14 @@ elif [ "${1}" = "async" ] ; then
   sh ./scripts/run_async.sh
 elif [ "${1}" = "init" ] ; then
   echo "Initialize module"
+  cd /data
+  curl -O https://s3-us-west-1.amazonaws.com/spacegraphcats.ucdavis.edu/microbe-genbank-sbt-k31-2017.05.09.tar.gz
+  tar xzf microbe-genbank-sbt-k31-2017.05.09.tar.gz
+  if [-d .sbt.genbank-k31] ; then
+    touch __READY__
+  else
+    echo "init failed"
+  fi
 elif [ "${1}" = "bash" ] ; then
   bash
 elif [ "${1}" = "report" ] ; then
