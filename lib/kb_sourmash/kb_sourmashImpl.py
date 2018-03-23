@@ -112,7 +112,7 @@ class kb_sourmash:
             report_info = kbr.create_extended_report(
                 {
                 'message': message,
-                'objects_created': [],
+                #'objects_created': [],
                 'workspace_name':workspace_name,
                 #'direct_html_link_index':0,
                 'report_object_name': 'sourmash_report_' + str(uuid.uuid4())
