@@ -4,6 +4,7 @@ import os  # noqa: F401
 import json  # noqa: F401
 import time
 import requests
+import shutil
 
 from os import environ
 try:
@@ -17,7 +18,7 @@ from biokbase.workspace.client import Workspace as workspaceService
 from kb_sourmash.kb_sourmashImpl import kb_sourmash
 from kb_sourmash.kb_sourmashServer import MethodContext
 from kb_sourmash.authclient import KBaseAuth as _KBaseAuth
-
+from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 
 class kb_sourmashTest(unittest.TestCase):
 
@@ -50,6 +51,7 @@ class kb_sourmashTest(unittest.TestCase):
         cls.serviceImpl = kb_sourmash(cls.cfg)
         cls.scratch = cls.cfg['scratch']
         cls.callback_url = os.environ['SDK_CALLBACK_URL']
+        cls.au = AssemblyUtil(os.environ['SDK_CALLBACK_URL'])
 
     @classmethod
     def tearDownClass(cls):
@@ -76,7 +78,7 @@ class kb_sourmashTest(unittest.TestCase):
         return self.__class__.ctx
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_your_method(self):
+    def test_run_sourmash(self):
         # Prepare test objects in workspace if needed using
         # self.getWsClient().save_objects({'workspace': self.getWsName(),
         #                                  'objects': []})
@@ -86,6 +88,15 @@ class kb_sourmashTest(unittest.TestCase):
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
-        params = { 'input_assembly_upa': "test", 'workspace_name': self.getWsName()}
+        tf = 'ecoliMG1655.fa'
+        target = os.path.join(self.scratch, tf)
+        shutil.copy('data/' + tf, target)
+        ref = self.au.save_assembly_from_fasta(
+            {'file': {'path': target},
+             'workspace_name': self.getWsName(),
+             'assembly_name': 'ecoliMG1655'})
+
+
+        params = { 'input_assembly_upa': ref, 'workspace_name': self.getWsName()}
         self.getImpl().run_sourmash(self.getContext(), params)
         pass

@@ -5,6 +5,8 @@ import subprocess
 import uuid
 
 from KBaseReport.KBaseReportClient import KBaseReport
+from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
+from AssemblyUtil.baseclient import ServerError as AssemblyUtilError
 #END_HEADER
 
 
@@ -29,6 +31,17 @@ class kb_sourmash:
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
+
+    def get_assembly(self, target_dir, assembly_upa):
+        auc = AssemblyUtil(self.callbackURL)
+        filename = os.path.join(target_dir, assembly_upa.replace('/', '_'))
+        try:
+            auc.get_assembly_as_fasta({'ref': assembly_upa, 'filename': filename})
+        except AssemblyUtilError as assembly_error:
+            print(str(assembly_error))
+            raise
+        return filename
+
     #END_CLASS_HEADER
 
     # config contains contents of config file in a hash or None if it couldn't
@@ -56,46 +69,40 @@ class kb_sourmash:
 
         if 'workspace_name' not in params:
             raise ValueError('workspace_name parameter is required')
+        if 'input_assembly_upa' not in params:
+            raise ValueError('input_assembly_upa parameter is required')
 
         workspace_name = params['workspace_name']
+        input_assembly_upa = params['input_assembly_upa']
 
-        run_dir = "/kb/module/test/data/"
+        data_dir = "/kb/module/test/data/"
+        share_dir = "/kb/module/work/tmp/"
 
-        print("quick test of sourmash\n")
-        # make index
-        print("Making sourmash index:\n")
-        sourmash_index_cmd = [self.SOURMASH, 'index', '-k', str(31),
-                                'ecolidb', 'ecoli_many_sigs/*.sig']
+        # get assembly fasta file
+        input_sequence_file = self.get_assembly(share_dir, input_assembly_upa)
+        input_sequence_sig = input_assembly_upa.replace('/', '_') + ".sig"
 
-        print('     ' + ' '.join(sourmash_index_cmd))
 
-        p=subprocess.Popen(" ".join(sourmash_index_cmd), cwd=run_dir, shell=True)
-        retcode = p.wait()
-
-        if p.returncode != 0:
-            raise ValueError('Error running sourmash index, return code: ' + str(retcode) + "\n")
-
-        #make ecoli genome sig
-        print("Making ecoli genome sig.\n")
+        #make genome sig
+        print("Making genome sig:\n")
         sourmash_compute_cmd = [self.SOURMASH, 'compute', '--scaled', str(2000),
-                                '-k', str(31), 'ecoliMG1655.fa',
-                                '-o', 'ecoli-genome.sig']
+                                '-k', str(31), input_sequence_file,
+                                '-o', input_sequence_sig]
 
-        print('     ' + ' '.join(sourmash_compute_cmd))
-        p=subprocess.Popen(" ".join(sourmash_compute_cmd), cwd=run_dir, shell=True)
+        p=subprocess.Popen(" ".join(sourmash_compute_cmd), cwd=share_dir, shell=True)
         retcode = p.wait()
 
         if p.returncode != 0:
             raise ValueError('Error running sourmash compute, return code: ' + str(retcode) + "\n")
 
         # search using sourmash index
-        sourmash_cmd = [self.SOURMASH, 'search', 'ecoli-genome.sig',
-                        'ecolidb.sbt.json', '-n', str(20) ]
+        sourmash_cmd = [self.SOURMASH, 'search', input_sequence_sig,
+                        os.path.join(data_dir, 'ecolidb.sbt.json'), '-n', str(20) ]
 
         print("Searching index...\n")
         print('     ' + ' '.join(sourmash_cmd))
 
-        p=subprocess.Popen(" ".join(sourmash_cmd), cwd=run_dir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p=subprocess.Popen(" ".join(sourmash_cmd), cwd=share_dir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         retcode = p.wait()
 
         if p.returncode != 0:
