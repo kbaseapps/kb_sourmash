@@ -20,7 +20,7 @@ elif [ "${1}" = "init" ] ; then
   cd /data
   curl -O https://s3-us-west-1.amazonaws.com/spacegraphcats.ucdavis.edu/microbe-genbank-sbt-k31-2017.05.09.tar.gz
   tar xzf microbe-genbank-sbt-k31-2017.05.09.tar.gz
-  if [-d .sbt.genbank-k31] ; then
+  if [ -d ".sbt.genbank-k31" ] ; then
     touch __READY__
   else
     echo "init failed"
