@@ -77,8 +77,8 @@ class kb_sourmash:
 
         data_dir = "/kb/module/test/data/"
         share_dir = "/kb/module/work/tmp/"
-        search_db = "/data/genbank-k31.sbt.json"
-        #search_db = os.path.join(data_dir, 'ecolidb.sbt.json')
+        #search_db = "/data/genbank-k31.sbt.json"
+        search_db = os.path.join(data_dir, 'ecolidb.sbt.json')
 
         # get assembly fasta file
         input_sequence_file = self.get_assembly(share_dir, input_assembly_upa)
