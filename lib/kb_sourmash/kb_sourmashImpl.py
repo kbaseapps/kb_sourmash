@@ -98,10 +98,10 @@ class kb_sourmash:
             raise ValueError('Error running sourmash compute, return code: ' + str(retcode) + "\n")
 
         # search using sourmash index
-        sourmash_cmd = [self.SOURMASH, 'search', input_sequence_sig,
+        sourmash_cmd = [self.SOURMASH, 'gather', input_sequence_sig,
                         search_db, '-n', str(20) ]
 
-        print("Searching index...\n")
+        print("Searching index" + search_db + " ...\n")
         print('     ' + ' '.join(sourmash_cmd))
 
         p=subprocess.Popen(" ".join(sourmash_cmd), cwd=share_dir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
