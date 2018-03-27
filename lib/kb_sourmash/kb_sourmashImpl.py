@@ -105,23 +105,39 @@ class kb_sourmash:
             raise ValueError('Error running sourmash compute, return code: ' + str(retcode) + "\n")
 
         # search using sourmash index
-        #sourmash_cmd = [self.SOURMASH, 'search', input_sequence_sig,
-        #                search_db, '-n', str(20) ]
+        sourmash_cmd = [self.SOURMASH, 'search', input_sequence_sig,
+                        search_db, '-n', str(20) ]
 
-        sourmash_cmd = [self.SOURMASH, 'gather', input_sequence_sig,
-                        search_db, '-k', str(31) ]
-
-        print("Searching index" + search_db + " ...\n")
+        print("Searching index " + search_db + " ...\n")
         print('     ' + ' '.join(sourmash_cmd))
 
         p=subprocess.Popen(" ".join(sourmash_cmd), cwd=share_dir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         retcode = p.wait()
 
         if p.returncode != 0:
-            raise ValueError('Error running sourmash search, return code: ' + str(retcode) + "\n")
+            #raise ValueError('Error running sourmash search, return code: ' + str(retcode) + "\n")
+            print('Error running sourmash search, return code: ' + str(retcode) + "\n")
 
         results, err = p.communicate()
         message = err + "\n" + results
+
+        print("Results\n", results, "\nErr:\n", err)
+
+        sourmash_cmd = [self.SOURMASH, 'gather', input_sequence_sig,
+                        search_db, '-k', str(31) ]
+
+        print("gathering index " + search_db + " ...\n")
+        print('     ' + ' '.join(sourmash_cmd))
+
+        p=subprocess.Popen(" ".join(sourmash_cmd), cwd=share_dir, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        retcode = p.wait()
+
+        if p.returncode != 0:
+            #raise ValueError('Error running sourmash search, return code: ' + str(retcode) + "\n")
+            print('Error running sourmash search, return code: ' + str(retcode) + "\n")
+
+        results, err = p.communicate()
+        message = message + err + "\n" + results
 
         print("Results\n", results, "\nErr:\n", err)
 
