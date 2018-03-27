@@ -134,7 +134,7 @@ class kb_sourmash:
 
         if p.returncode != 0:
             #raise ValueError('Error running sourmash search, return code: ' + str(retcode) + "\n")
-            print('Error running sourmash search, return code: ' + str(retcode) + "\n")
+            print('Error running sourmash gather, return code: ' + str(retcode) + "\n")
 
         results, err = p.communicate()
         message = message + err + "\n" + results

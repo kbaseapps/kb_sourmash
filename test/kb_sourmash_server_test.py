@@ -97,6 +97,7 @@ class kb_sourmashTest(unittest.TestCase):
              'assembly_name': 'ecoliMG1655'})
 
 
-        params = { 'input_assembly_upa': ref, 'workspace_name': self.getWsName()}
+        params = { 'input_assembly_upa': ref, 'workspace_name': self.getWsName(),
+                    'search_db': "Ecoli" }
         self.getImpl().run_sourmash(self.getContext(), params)
         pass
