@@ -124,6 +124,7 @@ $results is a kb_sourmash.SourmashResults
 SourmashParams is a reference to a hash where the following keys are defined:
 	input_assembly_upa has a value which is a string
 	workspace_name has a value which is a string
+	search_db has a value which is a string
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -139,6 +140,7 @@ $results is a kb_sourmash.SourmashResults
 SourmashParams is a reference to a hash where the following keys are defined:
 	input_assembly_upa has a value which is a string
 	workspace_name has a value which is a string
+	search_db has a value which is a string
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -308,6 +310,7 @@ Insert your typespec information here.
 a reference to a hash where the following keys are defined:
 input_assembly_upa has a value which is a string
 workspace_name has a value which is a string
+search_db has a value which is a string
 
 </pre>
 
@@ -318,6 +321,7 @@ workspace_name has a value which is a string
 a reference to a hash where the following keys are defined:
 input_assembly_upa has a value which is a string
 workspace_name has a value which is a string
+search_db has a value which is a string
 
 
 =end text

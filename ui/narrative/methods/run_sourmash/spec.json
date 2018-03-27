@@ -20,6 +20,25 @@
             "text_options": {
                 "valid_ws_types": [ "KBaseGenomes.ContigSet","KBaseGenomeAnnotations.Assembly" ]
             }
+        },
+        {
+            "id": "search_db",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "Ecoli" ],
+            "field_type": "dropdown",
+            "dropdown_options":{
+            "options": [{
+                "value": "Ecoli",
+                "display": "Ecoli"
+              },
+              {
+                "value": "Genbank",
+                "display": "Genbank"
+              }
+            ]
+          }
         }
     ],
     "behavior": {

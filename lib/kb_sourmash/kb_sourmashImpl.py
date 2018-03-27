@@ -27,7 +27,7 @@ class kb_sourmash:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "8002280c5b5730018cd6768195ad457918da5c0b"
+    GIT_COMMIT_HASH = "34993b74ad3d81e5036b4c770bf51aa2fbf09909"
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -59,7 +59,7 @@ class kb_sourmash:
         :param params: instance of type "SourmashParams" (Insert your
            typespec information here.) -> structure: parameter
            "input_assembly_upa" of String, parameter "workspace_name" of
-           String
+           String, parameter "search_db" of String
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
@@ -67,18 +67,25 @@ class kb_sourmash:
         # return variables are: results
         #BEGIN run_sourmash
 
+        data_dir = "/kb/module/test/data/"
+        share_dir = "/kb/module/work/tmp/"
+
         if 'workspace_name' not in params:
             raise ValueError('workspace_name parameter is required')
         if 'input_assembly_upa' not in params:
             raise ValueError('input_assembly_upa parameter is required')
 
+        if 'search_db' not in params:
+            raise ValueError('search_db parameter is required')
+        elif params['search_db'] == "Ecoli":
+            search_db = os.path.join(data_dir, 'ecolidb.sbt.json')
+        elif params['search_db'] == "Genbank":
+            search_db = "/data/genbank-k31.sbt.json"
+        else:
+            raise ValueError('search_db must be Ecoli or Genbank')
+
         workspace_name = params['workspace_name']
         input_assembly_upa = params['input_assembly_upa']
-
-        data_dir = "/kb/module/test/data/"
-        share_dir = "/kb/module/work/tmp/"
-        #search_db = "/data/genbank-k31.sbt.json"
-        search_db = os.path.join(data_dir, 'ecolidb.sbt.json')
 
         # get assembly fasta file
         input_sequence_file = self.get_assembly(share_dir, input_assembly_upa)

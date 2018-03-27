@@ -22,7 +22,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "input_assembly_upa",
-    "workspace_name"
+    "workspace_name",
+    "search_db"
 })
 public class SourmashParams {
 
@@ -30,6 +31,8 @@ public class SourmashParams {
     private String inputAssemblyUpa;
     @JsonProperty("workspace_name")
     private String workspaceName;
+    @JsonProperty("search_db")
+    private String searchDb;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("input_assembly_upa")
@@ -62,6 +65,21 @@ public class SourmashParams {
         return this;
     }
 
+    @JsonProperty("search_db")
+    public String getSearchDb() {
+        return searchDb;
+    }
+
+    @JsonProperty("search_db")
+    public void setSearchDb(String searchDb) {
+        this.searchDb = searchDb;
+    }
+
+    public SourmashParams withSearchDb(String searchDb) {
+        this.searchDb = searchDb;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -74,7 +92,7 @@ public class SourmashParams {
 
     @Override
     public String toString() {
-        return ((((((("SourmashParams"+" [inputAssemblyUpa=")+ inputAssemblyUpa)+", workspaceName=")+ workspaceName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((("SourmashParams"+" [inputAssemblyUpa=")+ inputAssemblyUpa)+", workspaceName=")+ workspaceName)+", searchDb=")+ searchDb)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

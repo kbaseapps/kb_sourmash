@@ -11,6 +11,7 @@ module kb_sourmash {
     typedef structure {
         string input_assembly_upa;
         string workspace_name;
+        string search_db;
     } SourmashParams;
 
     typedef structure {

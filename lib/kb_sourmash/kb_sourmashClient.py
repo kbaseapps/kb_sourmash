@@ -38,7 +38,7 @@ class kb_sourmash(object):
         :param params: instance of type "SourmashParams" (Insert your
            typespec information here.) -> structure: parameter
            "input_assembly_upa" of String, parameter "workspace_name" of
-           String
+           String, parameter "search_db" of String
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
