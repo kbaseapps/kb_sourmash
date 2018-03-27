@@ -55,6 +55,10 @@
                     "input_parameter": "input_assembly_upa",
                     "target_property": "input_assembly_upa",
                     "target_type_transform": "resolved-ref"
+                },
+                {
+                    "input_parameter": "search_db",
+                    "target_property": "search_db"
                 }
             ],
             "output_mapping": [
