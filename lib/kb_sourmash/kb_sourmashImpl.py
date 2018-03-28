@@ -27,7 +27,7 @@ class kb_sourmash:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "34993b74ad3d81e5036b4c770bf51aa2fbf09909"
+    GIT_COMMIT_HASH = "bcb4d53d86e7c13fbdd6696dbed274638f9a267d"
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -59,7 +59,7 @@ class kb_sourmash:
         :param params: instance of type "SourmashParams" (Insert your
            typespec information here.) -> structure: parameter
            "input_assembly_upa" of String, parameter "workspace_name" of
-           String, parameter "search_db" of String
+           String, parameter "search_db" of String, parameter "scaled" of Long
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
@@ -74,6 +74,12 @@ class kb_sourmash:
             raise ValueError('workspace_name parameter is required')
         if 'input_assembly_upa' not in params:
             raise ValueError('input_assembly_upa parameter is required')
+
+        if 'scaled' in params:
+            if params['scaled']:
+                scaled = params['scaled']
+        else:
+            scaled = 1000
 
         if 'search_db' not in params:
             raise ValueError('search_db parameter is required')
@@ -94,7 +100,7 @@ class kb_sourmash:
 
         #make genome sig
         print("Making genome sig:\n")
-        sourmash_compute_cmd = [self.SOURMASH, 'compute', '--scaled', str(2000),
+        sourmash_compute_cmd = [self.SOURMASH, 'compute', '--scaled', scaled,
                                 '-k', str(31), input_sequence_file,
                                 '-o', input_sequence_sig]
 

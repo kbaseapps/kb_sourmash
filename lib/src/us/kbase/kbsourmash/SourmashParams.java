@@ -23,7 +23,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "input_assembly_upa",
     "workspace_name",
-    "search_db"
+    "search_db",
+    "scaled"
 })
 public class SourmashParams {
 
@@ -33,6 +34,8 @@ public class SourmashParams {
     private String workspaceName;
     @JsonProperty("search_db")
     private String searchDb;
+    @JsonProperty("scaled")
+    private Long scaled;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("input_assembly_upa")
@@ -80,6 +83,21 @@ public class SourmashParams {
         return this;
     }
 
+    @JsonProperty("scaled")
+    public Long getScaled() {
+        return scaled;
+    }
+
+    @JsonProperty("scaled")
+    public void setScaled(Long scaled) {
+        this.scaled = scaled;
+    }
+
+    public SourmashParams withScaled(Long scaled) {
+        this.scaled = scaled;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -92,7 +110,7 @@ public class SourmashParams {
 
     @Override
     public String toString() {
-        return ((((((((("SourmashParams"+" [inputAssemblyUpa=")+ inputAssemblyUpa)+", workspaceName=")+ workspaceName)+", searchDb=")+ searchDb)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((("SourmashParams"+" [inputAssemblyUpa=")+ inputAssemblyUpa)+", workspaceName=")+ workspaceName)+", searchDb=")+ searchDb)+", scaled=")+ scaled)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

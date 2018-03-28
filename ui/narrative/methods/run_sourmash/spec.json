@@ -39,6 +39,17 @@
               }
             ]
           }
+        },
+        {
+            "id": "scaled",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "1000" ],
+            "field_type": "text",
+            "text_options": {
+              "validate_as": "int"
+            }
         }
     ],
     "behavior": {
@@ -59,6 +70,10 @@
                 {
                     "input_parameter": "search_db",
                     "target_property": "search_db"
+                },
+                {
+                    "input_parameter": "scaled",
+                    "target_property": "scaled"
                 }
             ],
             "output_mapping": [

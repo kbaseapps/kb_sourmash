@@ -125,6 +125,7 @@ SourmashParams is a reference to a hash where the following keys are defined:
 	input_assembly_upa has a value which is a string
 	workspace_name has a value which is a string
 	search_db has a value which is a string
+	scaled has a value which is an int
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -141,6 +142,7 @@ SourmashParams is a reference to a hash where the following keys are defined:
 	input_assembly_upa has a value which is a string
 	workspace_name has a value which is a string
 	search_db has a value which is a string
+	scaled has a value which is an int
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -311,6 +313,7 @@ a reference to a hash where the following keys are defined:
 input_assembly_upa has a value which is a string
 workspace_name has a value which is a string
 search_db has a value which is a string
+scaled has a value which is an int
 
 </pre>
 
@@ -322,6 +325,7 @@ a reference to a hash where the following keys are defined:
 input_assembly_upa has a value which is a string
 workspace_name has a value which is a string
 search_db has a value which is a string
+scaled has a value which is an int
 
 
 =end text
