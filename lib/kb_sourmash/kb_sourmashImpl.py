@@ -100,7 +100,7 @@ class kb_sourmash:
 
         #make genome sig
         print("Making genome sig:\n")
-        sourmash_compute_cmd = [self.SOURMASH, 'compute', '--scaled', scaled,
+        sourmash_compute_cmd = [self.SOURMASH, 'compute', '--scaled', str(scaled),
                                 '-k', str(31), input_sequence_file,
                                 '-o', input_sequence_sig]
 
