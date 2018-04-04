@@ -13,9 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * <p>Original spec-file type: SourmashParams</p>
- * <pre>
- * Insert your typespec information here.
- * </pre>
+ * 
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -27,7 +27,7 @@ class kb_sourmash:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "bcb4d53d86e7c13fbdd6696dbed274638f9a267d"
+    GIT_COMMIT_HASH = "8eeaa47d4027e309709d6c3d207acd18e67a844d"
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -56,10 +56,10 @@ class kb_sourmash:
 
     def run_sourmash(self, ctx, params):
         """
-        :param params: instance of type "SourmashParams" (Insert your
-           typespec information here.) -> structure: parameter
-           "input_assembly_upa" of String, parameter "workspace_name" of
-           String, parameter "search_db" of String, parameter "scaled" of Long
+        :param params: instance of type "SourmashParams" -> structure:
+           parameter "input_assembly_upa" of String, parameter
+           "workspace_name" of String, parameter "search_db" of String,
+           parameter "scaled" of Long
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
@@ -127,7 +127,7 @@ class kb_sourmash:
         results, err = p.communicate()
         message = err + "\n" + results
 
-        print("Results\n", results, "\nErr:\n", err)
+        print("Results\n" + results + "\nErr:\n" + err)
 
         sourmash_cmd = [self.SOURMASH, 'gather', input_sequence_sig,
                         search_db, '-k', str(31) ]
@@ -145,7 +145,7 @@ class kb_sourmash:
         results, err = p.communicate()
         message = message + err + "\n" + results
 
-        print("Results\n", results, "\nErr:\n", err)
+        print("Results\n" + results + "\nErr:\n" + err)
 
         #save report
         kbr = KBaseReport(self.callbackURL)
@@ -168,6 +168,28 @@ class kb_sourmash:
         # At some point might do deeper type checking...
         if not isinstance(results, dict):
             raise ValueError('Method run_sourmash return value ' +
+                             'results is not type dict as required.')
+        # return the results
+        return [results]
+
+    def run_sourmash_compare(self, ctx, SourmashCompareParams):
+        """
+        :param SourmashCompareParams: instance of type
+           "SourmashCompareParams" -> structure: parameter "object_list" of
+           list of type "obj_upa" (An X/Y/Z style workspace object
+           reference), parameter "workspace_name" of String, parameter
+           "scaled" of Long
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        # ctx is the context object
+        # return variables are: results
+        #BEGIN run_sourmash_compare
+        #END run_sourmash_compare
+
+        # At some point might do deeper type checking...
+        if not isinstance(results, dict):
+            raise ValueError('Method run_sourmash_compare return value ' +
                              'results is not type dict as required.')
         # return the results
         return [results]

@@ -337,6 +337,10 @@ class Application(object):
                              name='kb_sourmash.run_sourmash',
                              types=[dict])
         self.method_authentication['kb_sourmash.run_sourmash'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_sourmash.run_sourmash_compare,
+                             name='kb_sourmash.run_sourmash_compare',
+                             types=[dict])
+        self.method_authentication['kb_sourmash.run_sourmash_compare'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_sourmash.status,
                              name='kb_sourmash.status',
                              types=[dict])

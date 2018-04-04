@@ -1,0 +1,73 @@
+{
+    "ver": "0.0.1",
+    "authors": [
+        "psdehal"
+    ],
+    "contact": "",
+    "categories": ["active"],
+    "widgets": {
+        "input": null,
+        "output": "no-display"
+    },
+    "parameters": [
+        {
+            "id": "object_list",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": true,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ "KBaseGenomes.ContigSet","KBaseGenomeAnnotations.Assembly" ]
+            }
+        },
+        {
+            "id": "scaled",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "1000" ],
+            "field_type": "text",
+            "text_options": {
+              "validate_as": "int"
+            }
+        }
+    ],
+    "behavior": {
+        "service-mapping": {
+            "url": "",
+            "name": "kb_sourmash",
+            "method": "run_sourmash_compare",
+            "input_mapping": [
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                },
+                {
+                    "input_parameter": "object_list",
+                    "target_property": "object_list",
+                    "target_type_transform": "list<ref>"
+                },
+                {
+                    "input_parameter": "scaled",
+                    "target_property": "scaled"
+                }
+            ],
+            "output_mapping": [
+                {
+                    "service_method_output_path": [0, "report_name"],
+                    "target_property": "report_name"
+                },
+                {
+                    "service_method_output_path": [0, "report_ref"],
+                    "target_property": "report_ref"
+                },
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspaceName"
+                }
+            ]
+        }
+    },
+    "job_id_output_field": "docker"
+}

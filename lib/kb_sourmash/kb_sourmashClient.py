@@ -35,16 +35,30 @@ class kb_sourmash(object):
 
     def run_sourmash(self, params, context=None):
         """
-        :param params: instance of type "SourmashParams" (Insert your
-           typespec information here.) -> structure: parameter
-           "input_assembly_upa" of String, parameter "workspace_name" of
-           String, parameter "search_db" of String, parameter "scaled" of Long
+        :param params: instance of type "SourmashParams" -> structure:
+           parameter "input_assembly_upa" of String, parameter
+           "workspace_name" of String, parameter "search_db" of String,
+           parameter "scaled" of Long
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
         return self._client.call_method(
             'kb_sourmash.run_sourmash',
             [params], self._service_ver, context)
+
+    def run_sourmash_compare(self, SourmashCompareParams, context=None):
+        """
+        :param SourmashCompareParams: instance of type
+           "SourmashCompareParams" -> structure: parameter "object_list" of
+           list of type "obj_upa" (An X/Y/Z style workspace object
+           reference), parameter "workspace_name" of String, parameter
+           "scaled" of Long
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'kb_sourmash.run_sourmash_compare',
+            [SourmashCompareParams], self._service_ver, context)
 
     def status(self, context=None):
         return self._client.call_method('kb_sourmash.status',
