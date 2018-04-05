@@ -69,21 +69,17 @@ class SourmashUtils:
         staged_file_list = []
 
         for assembly_upa in object_list:
-            filename = os.path.join(output_directory, assembly_upa.replace('/', '_') + '.fa')
-            upperfilename = os.path.join(output_directory, assembly_upa.replace('/', '_') + '.u.fa')
-
             try:
-                auc.get_assembly_as_fasta({'ref': assembly_upa, 'filename': filename})
+                file = auc.get_assembly_as_fasta({'ref': assembly_upa})['path']
             except AssemblyUtilError as assembly_error:
                 print(str(assembly_error))
                 raise
-
+            filename = os.path.join(output_directory, os.path.basename(file))
             to_upper_command = "awk '{ if ($0 !~ />/) {print toupper($0)} else {print $0} }' " \
-                        + filename \
-                        + '> ' \
-                        + upperfilename
+                        + file + '> tmp.fa ' \
+                        + '&& mv tmp.fa ' + filename
             self._run_command(to_upper_command)
-            staged_file_list.append(upperfilename)
+            staged_file_list.append(filename)
 
         log('Created file list: {}'.format(staged_file_list))
         return staged_file_list
@@ -99,10 +95,10 @@ class SourmashUtils:
         exitCode = pipe.returncode
 
         if (exitCode == 0):
-            log('Executed commend:\n{}\n'.format(command) +
+            log('Executed command:\n{}\n'.format(command) +
                 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output))
         else:
-            error_msg = 'Error running commend:\n{}\n'.format(command)
+            error_msg = 'Error running command:\n{}\n'.format(command)
             error_msg += 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output)
             raise ValueError(error_msg)
 
