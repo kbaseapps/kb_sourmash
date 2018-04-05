@@ -9,6 +9,8 @@ import shutil
 from KBaseReport.KBaseReportClient import KBaseReport
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from AssemblyUtil.baseclient import ServerError as AssemblyUtilError
+from DataFileUtil.DataFileUtilClient import DataFileUtil
+
 
 SOURMASH_COMPUTE = "sourmash compute"
 KSIZE = 31
@@ -28,6 +30,7 @@ class SourmashUtils:
     def __init__(self, config):
         self.scratch = os.path.abspath(config['scratch'])
         self.callbackURL = os.environ['SDK_CALLBACK_URL']
+
 
     def _validate_sourmash_compare_params(self, params):
         """
@@ -115,7 +118,7 @@ class SourmashUtils:
         output_directory = os.path.join(self.scratch, str(uuid.uuid4()))
         self._mkdir_p(output_directory)
 
-        report_html_file = os.path.join(output_directory, 'report.html')
+        report_html_file = os.path.join(output_directory, 'index.html')
 
         shutil.copy(compare_outfile, output_directory)
         shutil.copy(compare_outfile + '.labels.txt', output_directory)
@@ -133,11 +136,17 @@ class SourmashUtils:
         html_file.write('</BODY></HTML>')
 
         html_file.close()
-        
+
+        dfu = DataFileUtil(self.callbackURL)
+        shock = dfu.file_to_shock({'file_path': output_directory,
+                                        'make_handle': 0,
+                                        'pack': 'zip'})
+
         report_params = {
             'message': '',
             'workspace_name': workspace_name,
             'html_links': [{'path': report_html_file,
+                            'shock_id': shock['shock_id'],
                             'name': os.path.basename(report_html_file),
                             'label': os.path.basename(report_html_file),
                             'description': 'HTML report for sourmash compare'}],
