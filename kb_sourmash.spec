@@ -35,4 +35,14 @@ module kb_sourmash {
 
     funcdef run_sourmash_compare(SourmashCompareParams params)
         returns(SourmashResults results) authentication required;
+
+    typedef structure {
+        obj_upa input_assembly_upa;
+        string workspace_name;
+        string search_db;
+        int scaled;
+    } SourmashSearchParams;
+
+    funcdef run_sourmash_search(SourmashSearchParams params)
+        returns (SourmashResults results) authentication required;
 };

@@ -62,8 +62,10 @@ class SourmashUtils:
         """
         log('Processing assembly object list: {}'.format(object_list))
 
-        #output_directory = 'fasta' #os.path.join(self.scratch, 'fasta')
-        #self._mkdir_p(output_directory)
+        # Sourmash uses the sequence filename as the default label for the signatures
+        # this includes the complete file path. So keeping the sequence file name as close
+        # to the desired label as possible is the reason not to place each file under
+        # a 'fasta' directory or inlude the '.fa' file extension
 
         auc = AssemblyUtil(self.callbackURL)
         staged_file_list = []
@@ -200,3 +202,12 @@ class SourmashUtils:
 
         results = {'report_name': report['name'], 'report_ref': report['ref']}
         return results
+
+    def run_sourmash_search(self, params):
+        """
+        given an input assembly, run sourmash search against selected signature
+        database and return report including list of hits
+        """
+        log('--->\nrunning run_sourmash_search\n' +
+            'params:\n{}'.format(json.dumps(params, indent=1)))
+        results = {'report_name': '', 'report_ref': ''}
