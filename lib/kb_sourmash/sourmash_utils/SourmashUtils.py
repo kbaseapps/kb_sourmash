@@ -58,12 +58,12 @@ class SourmashUtils:
 
     def _stage_assembly_files(self, object_list):
         """
-        _stage_assembly_files: download the fasta files to the scratch area in a 'fasta' directory and return list of file names
+        _stage_assembly_files: download the fasta files to the scratch area return list of file names
         """
         log('Processing assembly object list: {}'.format(object_list))
 
-        output_directory = os.path.join(self.scratch, 'fasta')
-        self._mkdir_p(output_directory)
+        #output_directory = 'fasta' #os.path.join(self.scratch, 'fasta')
+        #self._mkdir_p(output_directory)
 
         auc = AssemblyUtil(self.callbackURL)
         staged_file_list = []
@@ -74,9 +74,9 @@ class SourmashUtils:
             except AssemblyUtilError as assembly_error:
                 print(str(assembly_error))
                 raise
-            filename = os.path.join(output_directory, os.path.basename(file))
+            filename = os.path.basename(file).replace('.fa', '')
             to_upper_command = "awk '{ if ($0 !~ />/) {print toupper($0)} else {print $0} }' " \
-                        + file + '> tmp.fa ' \
+                        + file + ' > tmp.fa ' \
                         + '&& mv tmp.fa ' + filename
             self._run_command(to_upper_command)
             staged_file_list.append(filename)
@@ -108,7 +108,7 @@ class SourmashUtils:
         output signature file
         """
 
-        signatures_file = os.path.join(self.scratch, 'signatures')
+        signatures_file = 'signatures'
 
         compute_command = [self.SOURMASH_COMPUTE, '-k', str(self.KSIZE), '--scaled',
                 str(scaled), '-o', signatures_file] + assembly_files_list
@@ -184,7 +184,7 @@ class SourmashUtils:
         signatures_file = self._build_signatures(assembly_files_list, params['scaled'])
 
         #run compare command
-        compare_outfile = os.path.join(self.scratch, 'compare.out')
+        compare_outfile = 'compare.out'
         compare_command = [self.SOURMASH_COMPARE, '-k', str(self.KSIZE), '-o',
             compare_outfile, signatures_file]
 
