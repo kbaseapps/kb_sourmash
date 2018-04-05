@@ -33,6 +33,6 @@ module kb_sourmash {
         int scaled;
     } SourmashCompareParams;
 
-    funcdef run_sourmash_compare(SourmashCompareParams)
+    funcdef run_sourmash_compare(SourmashCompareParams params)
         returns(SourmashResults results) authentication required;
 };

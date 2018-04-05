@@ -208,7 +208,7 @@ SourmashResults is a reference to a hash where the following keys are defined:
 
 =head2 run_sourmash_compare
 
-  $results = $obj->run_sourmash_compare($SourmashCompareParams)
+  $results = $obj->run_sourmash_compare($params)
 
 =over 4
 
@@ -217,7 +217,7 @@ SourmashResults is a reference to a hash where the following keys are defined:
 =begin html
 
 <pre>
-$SourmashCompareParams is a kb_sourmash.SourmashCompareParams
+$params is a kb_sourmash.SourmashCompareParams
 $results is a kb_sourmash.SourmashResults
 SourmashCompareParams is a reference to a hash where the following keys are defined:
 	object_list has a value which is a reference to a list where each element is a kb_sourmash.obj_upa
@@ -234,7 +234,7 @@ SourmashResults is a reference to a hash where the following keys are defined:
 
 =begin text
 
-$SourmashCompareParams is a kb_sourmash.SourmashCompareParams
+$params is a kb_sourmash.SourmashCompareParams
 $results is a kb_sourmash.SourmashResults
 SourmashCompareParams is a reference to a hash where the following keys are defined:
 	object_list has a value which is a reference to a list where each element is a kb_sourmash.obj_upa
@@ -268,10 +268,10 @@ SourmashResults is a reference to a hash where the following keys are defined:
 							       "Invalid argument count for function run_sourmash_compare (received $n, expecting 1)");
     }
     {
-	my($SourmashCompareParams) = @args;
+	my($params) = @args;
 
 	my @_bad_arguments;
-        (ref($SourmashCompareParams) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"SourmashCompareParams\" (value was \"$SourmashCompareParams\")");
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
 	    my $msg = "Invalid arguments passed to run_sourmash_compare:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,

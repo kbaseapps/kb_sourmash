@@ -78,7 +78,7 @@ class kb_sourmashTest(unittest.TestCase):
         return self.__class__.ctx
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_run_sourmash(self):
+    def xtest_run_sourmash(self):
         # Prepare test objects in workspace if needed using
         # self.getWsClient().save_objects({'workspace': self.getWsName(),
         #                                  'objects': []})
@@ -100,4 +100,21 @@ class kb_sourmashTest(unittest.TestCase):
         params = { 'input_assembly_upa': ref, 'workspace_name': self.getWsName(),
                     'search_db': "Ecoli" }
         self.getImpl().run_sourmash(self.getContext(), params)
+        pass
+
+    def test_run_sourmash_compare(self):
+        tf = 'ecoliMG1655.fa'
+        target = os.path.join(self.scratch, tf)
+        shutil.copy('data/' + tf, target)
+        ref = self.au.save_assembly_from_fasta(
+            {'file': {'path': target},
+             'workspace_name': self.getWsName(),
+             'assembly_name': 'ecoliMG1655'})
+        ref2 = self.au.save_assembly_from_fasta(
+            {'file': {'path': target},
+             'workspace_name': self.getWsName(),
+             'assembly_name': 'ecoliMG1655_2'})
+
+        params = { 'object_list': [ref, ref2], 'workspace_name': self.getWsName()}
+        self.getImpl().run_sourmash_compare(self.getContext(), params)
         pass

@@ -7,6 +7,8 @@ import uuid
 from KBaseReport.KBaseReportClient import KBaseReport
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from AssemblyUtil.baseclient import ServerError as AssemblyUtilError
+
+from kb_sourmash.sourmash_utils.SourmashUtils import SourmashUtils
 #END_HEADER
 
 
@@ -27,7 +29,7 @@ class kb_sourmash:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "8eeaa47d4027e309709d6c3d207acd18e67a844d"
+    GIT_COMMIT_HASH = "5593033f4aedc3c2e0dd30315951036acb423680"
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -48,6 +50,7 @@ class kb_sourmash:
     # be found
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
+        self.config = config
         self.scratch = os.path.abspath(config['scratch'])
         self.callbackURL = os.environ['SDK_CALLBACK_URL']
         #END_CONSTRUCTOR
@@ -172,19 +175,22 @@ class kb_sourmash:
         # return the results
         return [results]
 
-    def run_sourmash_compare(self, ctx, SourmashCompareParams):
+    def run_sourmash_compare(self, ctx, params):
         """
-        :param SourmashCompareParams: instance of type
-           "SourmashCompareParams" -> structure: parameter "object_list" of
-           list of type "obj_upa" (An X/Y/Z style workspace object
-           reference), parameter "workspace_name" of String, parameter
-           "scaled" of Long
+        :param params: instance of type "SourmashCompareParams" -> structure:
+           parameter "object_list" of list of type "obj_upa" (An X/Y/Z style
+           workspace object reference), parameter "workspace_name" of String,
+           parameter "scaled" of Long
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
         # ctx is the context object
         # return variables are: results
         #BEGIN run_sourmash_compare
+
+        sourmash_runner = SourmashUtils(self.config)
+        results = sourmash_runner.run_sourmash_compare(params)
+
         #END run_sourmash_compare
 
         # At some point might do deeper type checking...
