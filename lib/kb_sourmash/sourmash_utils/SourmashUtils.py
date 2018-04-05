@@ -70,12 +70,21 @@ class SourmashUtils:
 
         for assembly_upa in object_list:
             filename = os.path.join(output_directory, assembly_upa.replace('/', '_') + '.fa')
+            upperfilename = os.path.join(output_directory, assembly_upa.replace('/', '_') + '.u.fa')
+
             try:
                 auc.get_assembly_as_fasta({'ref': assembly_upa, 'filename': filename})
             except AssemblyUtilError as assembly_error:
                 print(str(assembly_error))
                 raise
-            staged_file_list.append(filename)
+
+            to_upper_command = "awk '{ if ($0 !~ />/) {print toupper($0)} else {print $0} }' " \
+                        + filename \
+                        + '> ' \
+                        + upperfilename
+            self._run_command(to_upper_command)
+            staged_file_list.append(upperfilename)
+
         log('Created file list: {}'.format(staged_file_list))
         return staged_file_list
 
