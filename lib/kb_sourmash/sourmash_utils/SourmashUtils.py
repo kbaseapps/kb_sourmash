@@ -118,7 +118,7 @@ class SourmashUtils:
         report_html_file = os.path.join(output_directory, 'report.html')
 
         shutil.copy(compare_outfile, output_directory)
-        shutil.copy(compare_outfile + '.lables.txt', output_directory)
+        shutil.copy(compare_outfile + '.labels.txt', output_directory)
         shutil.copy(compare_outfile + '.dendro.png', output_directory)
         shutil.copy(compare_outfile + '.hist.png', output_directory)
         shutil.copy(compare_outfile + '.matrix.png', output_directory)
@@ -132,6 +132,8 @@ class SourmashUtils:
             format(base+'.dendro.png', base+'.hist.png', base+'.matrix.png'))
         html_file.write('</BODY></HTML>')
 
+        html_file.close()
+        
         report_params = {
             'message': '',
             'workspace_name': workspace_name,
@@ -160,6 +162,7 @@ class SourmashUtils:
             params['scaled'] = 1000
 
         self._validate_sourmash_compare_params(params)
+        os.chdir(self.scratch)
 
         assembly_files_list = self._stage_assembly_files(params.get('object_list'))
 
@@ -181,5 +184,5 @@ class SourmashUtils:
 
         report = self._generate_report(compare_outfile, params['workspace_name'])
 
-        results = {'report_name': '', 'report_ref': ''}
+        results = {'report_name': report['name'], 'report_ref': report['ref']}
         return results
