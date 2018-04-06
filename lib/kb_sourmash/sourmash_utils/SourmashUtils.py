@@ -15,9 +15,13 @@ from DataFileUtil.DataFileUtilClient import DataFileUtil
 SOURMASH_COMPUTE = "sourmash compute"
 KSIZE = 31
 
+
 def log(message, prefix_newline=False):
-    """Logging function, provides a hook to suppress or redirect log messages."""
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
+    """
+    Logging function, provides a hook to suppress or redirect log messages.
+    """
+    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time())
+          + ': ' + str(message))
 
 
 class SourmashUtils:
@@ -25,12 +29,13 @@ class SourmashUtils:
     SOURMASH_COMPUTE = "sourmash compute"
     SOURMASH_COMPARE = "sourmash compare"
     SOURMASH_PLOT = "sourmash plot"
+    SOURMASH_SEARCH = "sourmash search"
+
     KSIZE = 31
 
     def __init__(self, config):
         self.scratch = os.path.abspath(config['scratch'])
         self.callbackURL = os.environ['SDK_CALLBACK_URL']
-
 
     def _validate_sourmash_compare_params(self, params):
         """
@@ -39,6 +44,16 @@ class SourmashUtils:
         log('Start paramter validation.')
 
         for p in ['object_list', 'workspace_name']:
+            if p not in params:
+                raise ValueError('"{}" parameter is required, but missing'.format(p))
+
+    def _validate_sourmash_search_params(self, params):
+        """
+        very simple validation for required paramteres
+        """
+        log('Start parameter validation.')
+
+        for p in ['input_assembly_upa', 'workspace_name', 'search_db']:
             if p not in params:
                 raise ValueError('"{}" parameter is required, but missing'.format(p))
 
@@ -58,7 +73,8 @@ class SourmashUtils:
 
     def _stage_assembly_files(self, object_list):
         """
-        _stage_assembly_files: download the fasta files to the scratch area return list of file names
+        _stage_assembly_files: download the fasta files to the scratch area
+        return list of file names
         """
         log('Processing assembly object list: {}'.format(object_list))
 
@@ -78,8 +94,7 @@ class SourmashUtils:
                 raise
             filename = os.path.basename(file).replace('.fa', '')
             to_upper_command = "awk '{ if ($0 !~ />/) {print toupper($0)} else {print $0} }' " \
-                        + file + ' > tmp.fa ' \
-                        + '&& mv tmp.fa ' + filename
+                               + file + ' > tmp.fa ' + '&& mv tmp.fa ' + filename
             self._run_command(to_upper_command)
             staged_file_list.append(filename)
 
@@ -113,7 +128,7 @@ class SourmashUtils:
         signatures_file = 'signatures'
 
         compute_command = [self.SOURMASH_COMPUTE, '-k', str(self.KSIZE), '--scaled',
-                str(scaled), '-o', signatures_file] + assembly_files_list
+                           str(scaled), '-o', signatures_file] + assembly_files_list
 
         self._run_command(" ".join(compute_command))
         return signatures_file
@@ -139,15 +154,14 @@ class SourmashUtils:
 
         html_file.write('<HTML><BODY>')
         html_file.write('<img src="{}"><img src="{}"><img src="{}">'.
-            format(base+'.dendro.png', base+'.hist.png', base+'.matrix.png'))
+                        format(base+'.dendro.png', base+'.hist.png', base+'.matrix.png'))
         html_file.write('</BODY></HTML>')
 
         html_file.close()
 
         dfu = DataFileUtil(self.callbackURL)
         shock = dfu.file_to_shock({'file_path': output_directory,
-                                        'make_handle': 0,
-                                        'pack': 'zip'})
+                                  'make_handle': 0, 'pack': 'zip'})
 
         report_params = {
             'message': '',
@@ -166,7 +180,6 @@ class SourmashUtils:
 
         return output
 
-
     def run_sourmash_compare(self, params):
         """
         run sourmash compare app
@@ -182,21 +195,21 @@ class SourmashUtils:
 
         assembly_files_list = self._stage_assembly_files(params.get('object_list'))
 
-        #build signatures from fasta files
+        # build signatures from fasta files
         signatures_file = self._build_signatures(assembly_files_list, params['scaled'])
 
-        #run compare command
+        # run compare command
         compare_outfile = 'compare.out'
         compare_command = [self.SOURMASH_COMPARE, '-k', str(self.KSIZE), '-o',
-            compare_outfile, signatures_file]
+                           compare_outfile, signatures_file]
 
         self._run_command(" ".join(compare_command))
 
-        #make plots
+        # make plots
         plot_command = [self.SOURMASH_PLOT, compare_outfile, '--labels']
         self._run_command(" ".join(plot_command))
 
-        #make report
+        # make report
 
         report = self._generate_report(compare_outfile, params['workspace_name'])
 
@@ -210,4 +223,32 @@ class SourmashUtils:
         """
         log('--->\nrunning run_sourmash_search\n' +
             'params:\n{}'.format(json.dumps(params, indent=1)))
+
+        self._validate_sourmash_search_params(params)
+
+        data_dir = "/kb/module/test/data/"
+
+        if 'scaled' not in params:
+            params['scaled'] = 1000
+
+        if 'search_db' not in params:
+            raise ValueError('search_db parameter is required')
+        elif params['search_db'] == "Ecoli":
+            search_db = os.path.join(data_dir, 'ecolidb.sbt.json')
+        elif params['search_db'] == "Genbank":
+            search_db = "/data/genbank-k31.sbt.json"
+        else:
+            raise ValueError('search_db must be Ecoli or Genbank')
+
+        os.chdir(self.scratch)
+
+        assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
+
+        signature_file = self._build_signatures(assembly_file, params['scaled'])
+
+        # run search
+        search_command = [self.SOURMASH_SEARCH, signature_file, search_db, '-n', str(20)]
+        self._run_command(' '.join(search_command))
+
         results = {'report_name': '', 'report_ref': ''}
+        return results

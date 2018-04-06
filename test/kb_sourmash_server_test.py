@@ -48,16 +48,29 @@ class kb_sourmashTest(unittest.TestCase):
                         'authenticated': 1})
         cls.wsURL = cls.cfg['workspace-url']
         cls.wsClient = workspaceService(cls.wsURL)
+        suffix = int(time.time() * 1000)
+        wsName = "test_kb_sourmash_" + str(suffix)
+        cls.ws_info = cls.wsClient.create_workspace({'workspace': wsName})
         cls.serviceImpl = kb_sourmash(cls.cfg)
         cls.scratch = cls.cfg['scratch']
         cls.callback_url = os.environ['SDK_CALLBACK_URL']
         cls.au = AssemblyUtil(os.environ['SDK_CALLBACK_URL'])
+        cls.setup_data()
 
     @classmethod
     def tearDownClass(cls):
         if hasattr(cls, 'wsName'):
             cls.wsClient.delete_workspace({'workspace': cls.wsName})
             print('Test workspace was deleted')
+
+    @classmethod
+    def setup_data(cls):
+        tf = 'ecoliMG1655.fa'
+        target = os.path.join(cls.scratch, tf)
+        shutil.copy('data/' + tf, target)
+        cls.ref = cls.au.save_assembly_from_fasta({'file': {'path': target},
+                                                    'workspace_name': cls.ws_info[1],
+                                                    'assembly_name': 'ecoliMG1655'})
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -96,25 +109,25 @@ class kb_sourmashTest(unittest.TestCase):
              'workspace_name': self.getWsName(),
              'assembly_name': 'ecoliMG1655'})
 
-
-        params = { 'input_assembly_upa': ref, 'workspace_name': self.getWsName(),
-                    'search_db': "Ecoli" }
+        params = {'input_assembly_upa': cls.ref, 'workspace_name': self.getWsName(),
+                  'search_db': "Ecoli"}
         self.getImpl().run_sourmash(self.getContext(), params)
         pass
 
-    def test_run_sourmash_compare(self):
+    def xtest_run_sourmash_compare(self):
         tf = 'ecoliMG1655.fa'
         target = os.path.join(self.scratch, tf)
-        shutil.copy('data/' + tf, target)
-        ref = self.au.save_assembly_from_fasta(
-            {'file': {'path': target},
-             'workspace_name': self.getWsName(),
-             'assembly_name': 'ecoliMG1655'})
         ref2 = self.au.save_assembly_from_fasta(
             {'file': {'path': target},
              'workspace_name': self.getWsName(),
              'assembly_name': 'ecoliMG1655_2'})
 
-        params = { 'object_list': [ref, ref2], 'workspace_name': self.getWsName()}
+        params = {'object_list': [self.ref, ref2], 'workspace_name': self.getWsName()}
         self.getImpl().run_sourmash_compare(self.getContext(), params)
+        pass
+
+    def test_run_sourmash_search(self):
+        params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
+                  'search_db': 'Ecoli'}
+        self.getImpl().run_sourmash_search(self.getContext(), params)
         pass
