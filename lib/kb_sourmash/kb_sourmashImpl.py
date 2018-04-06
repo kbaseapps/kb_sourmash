@@ -29,7 +29,7 @@ class kb_sourmash:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "4202de317d62e3a2182395581c937eb615f347f9"
+    GIT_COMMIT_HASH = "4cce05c8d942bac04df3ca157e1b651cea4faff4"
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -221,6 +221,31 @@ class kb_sourmash:
         # At some point might do deeper type checking...
         if not isinstance(results, dict):
             raise ValueError('Method run_sourmash_search return value ' +
+                             'results is not type dict as required.')
+        # return the results
+        return [results]
+
+    def run_sourmash_gather(self, ctx, params):
+        """
+        :param params: instance of type "SourmashGatherParams" -> structure:
+           parameter "input_assembly_upa" of type "obj_upa" (An X/Y/Z style
+           workspace object reference), parameter "workspace_name" of String,
+           parameter "search_db" of String, parameter "scaled" of Long
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        # ctx is the context object
+        # return variables are: results
+        #BEGIN run_sourmash_gather
+
+        sourmash_gather_runner = SourmashUtils(self.config)
+        results = sourmash_gather_runner.run_sourmash_gather(params)
+
+        #END run_sourmash_gather
+
+        # At some point might do deeper type checking...
+        if not isinstance(results, dict):
+            raise ValueError('Method run_sourmash_gather return value ' +
                              'results is not type dict as required.')
         # return the results
         return [results]

@@ -30,6 +30,7 @@ class SourmashUtils:
     SOURMASH_COMPARE = "sourmash compare"
     SOURMASH_PLOT = "sourmash plot"
     SOURMASH_SEARCH = "sourmash search"
+    SOURMASH_GATHER = "sourmash gather"
 
     KSIZE = 31
 
@@ -56,6 +57,12 @@ class SourmashUtils:
         for p in ['input_assembly_upa', 'workspace_name', 'search_db']:
             if p not in params:
                 raise ValueError('"{}" parameter is required, but missing'.format(p))
+
+    def _validate_sourmash_gather_params(self, params):
+        """
+        right now, the params are the same as search
+        """
+        self._validate_sourmash_search_params(params)
 
     def _mkdir_p(self, path):
         """
@@ -132,6 +139,19 @@ class SourmashUtils:
 
         self._run_command(" ".join(compute_command))
         return signatures_file
+
+    def _set_search_db(self, searchdb_label):
+        """
+        label to search db file path
+        """
+        if (searchdb_label == "Ecoli"):
+            search_db = '/kb/module/test/data/ecolidb.sbt.json'
+        elif searchdb_label == "Genbank":
+            search_db = "/data/genbank-k31.sbt.json"
+        else:
+            raise ValueError('search_db must be Ecoli or Genbank')
+
+        return search_db
 
     def _generate_report(self, compare_outfile, workspace_name):
         """
@@ -226,19 +246,13 @@ class SourmashUtils:
 
         self._validate_sourmash_search_params(params)
 
-        data_dir = "/kb/module/test/data/"
-
         if 'scaled' not in params:
             params['scaled'] = 1000
 
         if 'search_db' not in params:
             raise ValueError('search_db parameter is required')
-        elif params['search_db'] == "Ecoli":
-            search_db = os.path.join(data_dir, 'ecolidb.sbt.json')
-        elif params['search_db'] == "Genbank":
-            search_db = "/data/genbank-k31.sbt.json"
         else:
-            raise ValueError('search_db must be Ecoli or Genbank')
+            search_db = self._set_search_db(params['search_db'])
 
         os.chdir(self.scratch)
 
@@ -249,6 +263,35 @@ class SourmashUtils:
         # run search
         search_command = [self.SOURMASH_SEARCH, signature_file, search_db, '-n', str(20)]
         self._run_command(' '.join(search_command))
+
+        results = {'report_name': '', 'report_ref': ''}
+        return results
+
+    def run_sourmash_gather(self, params):
+        """
+        input assembly, run gather against selected database return report
+        """
+        log('--->\nrunning run_sourmash_gather\nparams:\n{}'.format(json.dumps(params, indent=1)))
+
+        self._validate_sourmash_gather_params(params)
+
+        if 'scaled' not in params:
+            params['scaled'] = 1000
+
+        if 'search_db' not in params:
+            raise ValueError('search_db parameter is required')
+        else:
+            search_db = self._set_search_db(params['search_db'])
+
+        os.chdir(self.scratch)
+
+        assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
+
+        signature_file = self._build_signatures(assembly_file, params['scaled'])
+
+        # run gather
+        gather_command = [self.SOURMASH_GATHER, '-k', str(self.KSIZE), signature_file, search_db]
+        self._run_command(' '.join(gather_command))
 
         results = {'report_name': '', 'report_ref': ''}
         return results
