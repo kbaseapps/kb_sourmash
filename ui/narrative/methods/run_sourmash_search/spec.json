@@ -36,6 +36,14 @@
               {
                 "value": "Genbank",
                 "display": "Genbank"
+              },
+              {
+                "value": "img_bact_mags",
+                "display": "IMG Bacterial MAGs"
+              },
+              {
+                "value": "img_arch_isol",
+                "display": "IMG Archael Isolates"
               }
             ]
           }

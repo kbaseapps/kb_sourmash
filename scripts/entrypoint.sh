@@ -19,9 +19,14 @@ elif [ "${1}" = "async" ] ; then
 elif [ "${1}" = "init" ] ; then
   echo "Initialize module"
   cd /data
+  echo "Getting databases"
   curl -O https://s3-us-west-1.amazonaws.com/spacegraphcats.ucdavis.edu/microbe-genbank-sbt-k31-2017.05.09.tar.gz
   tar xzf microbe-genbank-sbt-k31-2017.05.09.tar.gz
-  if [ -d ".sbt.genbank-k31" ] ; then
+  curl -O ftp://ftp.kbase.us/sourmash_data/img_arch_isol.tar.gz
+  tar xzf img_arch_isol.tar.gz
+  curl -O ftp://ftp.kbase.us/sourmash_data/img_bact_mags.tar.gz
+  tar xzf img_bact_mags.tar.gz
+  if [[ -d ".sbt.genbank-k31" && -d ".sbt.img_arch_isol" && -d ".sbt.img_bact_mags" ]] ; then
     touch __READY__
   else
     echo "init failed"

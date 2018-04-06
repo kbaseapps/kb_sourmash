@@ -148,6 +148,10 @@ class SourmashUtils:
             search_db = '/kb/module/test/data/ecolidb.sbt.json'
         elif searchdb_label == "Genbank":
             search_db = "/data/genbank-k31.sbt.json"
+        elif searchdb_label == "img_bact_mags":
+            search_db = "/data/img_bact_mags.sbt.json"
+        elif searchdb_label == "img_arch_isol":
+            search_db = "/data/img_arch_isol.sbt.json"
         else:
             raise ValueError('search_db must be Ecoli or Genbank')
 

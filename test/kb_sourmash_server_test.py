@@ -134,6 +134,6 @@ class kb_sourmashTest(unittest.TestCase):
 
     def test_run_sourmash_gather(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
-                  'search_db': 'Ecoli'}
+                  'search_db': 'Genbank'}
         self.getImpl().run_sourmash_gather(self.getContext(), params)
         pass
