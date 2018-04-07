@@ -2,7 +2,7 @@ module-name:
     kb_sourmash
 
 module-description:
-    KBase sourmash with RefSeq k=31 indexed sketches of ~100k Genbank microbes from 2017-05-09
+    KBase sourmash with RefSeq k=31 indexed sketches of ~100k Genbank microbes from 2017-05-09, IMG archael isolates, and IMG bacterial MAGs
 
 service-language:
     python
@@ -14,4 +14,4 @@ owners:
     [psdehal]
 
 data-version:
-    0.1
+    0.2
