@@ -69,8 +69,8 @@ class kb_sourmashTest(unittest.TestCase):
         target = os.path.join(cls.scratch, tf)
         shutil.copy('data/' + tf, target)
         cls.ref = cls.au.save_assembly_from_fasta({'file': {'path': target},
-                                                    'workspace_name': cls.ws_info[1],
-                                                    'assembly_name': 'ecoliMG1655'})
+                                                   'workspace_name': cls.ws_info[1],
+                                                   'assembly_name': 'ecoliMG1655'})
 
     def getWsClient(self):
         return self.__class__.wsClient
@@ -101,15 +101,8 @@ class kb_sourmashTest(unittest.TestCase):
         #
         # Check returned data with
         # self.assertEqual(ret[...], ...) or other unittest methods
-        tf = 'ecoliMG1655.fa'
-        target = os.path.join(self.scratch, tf)
-        shutil.copy('data/' + tf, target)
-        ref = self.au.save_assembly_from_fasta(
-            {'file': {'path': target},
-             'workspace_name': self.getWsName(),
-             'assembly_name': 'ecoliMG1655'})
 
-        params = {'input_assembly_upa': cls.ref, 'workspace_name': self.getWsName(),
+        params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'search_db': "Ecoli"}
         self.getImpl().run_sourmash(self.getContext(), params)
         pass
@@ -128,7 +121,7 @@ class kb_sourmashTest(unittest.TestCase):
 
     def test_run_sourmash_search(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
-                  'search_db': 'Ecoli'}
+                  'search_db': 'Ecoli', 'containment':"1"}
         self.getImpl().run_sourmash_search(self.getContext(), params)
         pass
 

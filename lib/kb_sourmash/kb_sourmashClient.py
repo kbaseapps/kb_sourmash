@@ -77,7 +77,9 @@ class kb_sourmash(object):
         :param params: instance of type "SourmashGatherParams" -> structure:
            parameter "input_assembly_upa" of type "obj_upa" (An X/Y/Z style
            workspace object reference), parameter "workspace_name" of String,
-           parameter "search_db" of String, parameter "scaled" of Long
+           parameter "search_db" of String, parameter "scaled" of Long,
+           parameter "containment" of type "boolean" (A boolean - 0 for
+           false, 1 for true. @range (0, 1))
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """

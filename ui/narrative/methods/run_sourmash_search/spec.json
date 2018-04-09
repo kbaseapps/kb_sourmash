@@ -74,6 +74,18 @@
             "text_options": {
               "validate_as": "int"
             }
+        },
+        {
+            "id": "containment",
+            "optional": true,
+            "advance": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "checkbox",
+            "checkbox_options":{
+                "checked_value": 1,
+                "unchecked_value": 0
+            }
         }
     ],
     "behavior": {
@@ -98,6 +110,10 @@
                 {
                     "input_parameter": "scaled",
                     "target_property": "scaled"
+                },
+                {
+                    "input_parameter": "containment",
+                    "target_property": "containment"
                 }
             ],
             "output_mapping": [

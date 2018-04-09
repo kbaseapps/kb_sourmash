@@ -44,6 +44,11 @@ parameters :
             Scaled
         short-hint : |
             Effective compression ratio to make query signatures
+    containment :
+        ui-name : |
+            Containment
+        short-hint : |
+            Search for hits where the query is contained in the subject hit.
 
 description : |
     <p>Search target sketch database with minhash sketch of input assembly</p>

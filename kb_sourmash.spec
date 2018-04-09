@@ -12,6 +12,12 @@ module kb_sourmash {
     */
     typedef string obj_upa;
 
+    /*
+    A boolean - 0 for false, 1 for true.
+        @range (0, 1)
+    */
+    typedef int boolean;
+
     typedef structure {
         string input_assembly_upa;
         string workspace_name;
@@ -51,6 +57,7 @@ module kb_sourmash {
         string workspace_name;
         string search_db;
         int scaled;
+        boolean containment;
     } SourmashGatherParams;
 
     funcdef run_sourmash_gather(SourmashGatherParams params)

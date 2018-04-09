@@ -422,7 +422,9 @@ SourmashGatherParams is a reference to a hash where the following keys are defin
 	workspace_name has a value which is a string
 	search_db has a value which is a string
 	scaled has a value which is an int
+	containment has a value which is a kb_sourmash.boolean
 obj_upa is a string
+boolean is an int
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -440,7 +442,9 @@ SourmashGatherParams is a reference to a hash where the following keys are defin
 	workspace_name has a value which is a string
 	search_db has a value which is a string
 	scaled has a value which is an int
+	containment has a value which is a kb_sourmash.boolean
 obj_upa is a string
+boolean is an int
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -622,6 +626,38 @@ a string
 
 
 
+=head2 boolean
+
+=over 4
+
+
+
+=item Description
+
+A boolean - 0 for false, 1 for true.
+    @range (0, 1)
+
+
+=item Definition
+
+=begin html
+
+<pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
+
+
+
 =head2 SourmashParams
 
 =over 4
@@ -776,6 +812,7 @@ input_assembly_upa has a value which is a kb_sourmash.obj_upa
 workspace_name has a value which is a string
 search_db has a value which is a string
 scaled has a value which is an int
+containment has a value which is a kb_sourmash.boolean
 
 </pre>
 
@@ -788,6 +825,7 @@ input_assembly_upa has a value which is a kb_sourmash.obj_upa
 workspace_name has a value which is a string
 search_db has a value which is a string
 scaled has a value which is an int
+containment has a value which is a kb_sourmash.boolean
 
 
 =end text

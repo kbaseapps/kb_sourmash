@@ -266,6 +266,11 @@ class SourmashUtils:
         else:
             search_db = self._set_search_db(params['search_db'])
 
+        if params.get('containment'):
+            containment_flag = '--containment'
+        else:
+            containment_flag = ''
+
         os.chdir(self.scratch)
 
         assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
@@ -273,7 +278,8 @@ class SourmashUtils:
         signature_file = self._build_signatures(assembly_file, params['scaled'])
 
         # run search
-        search_command = [self.SOURMASH_SEARCH, signature_file, search_db, '-n', str(20)]
+        search_command = [self.SOURMASH_SEARCH, signature_file, search_db,
+                          '-n', str(20), containment_flag]
         self._run_command(' '.join(search_command))
 
         results = {'report_name': '', 'report_ref': ''}
