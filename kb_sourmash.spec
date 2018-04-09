@@ -47,6 +47,7 @@ module kb_sourmash {
         string workspace_name;
         string search_db;
         int scaled;
+        boolean containment;
     } SourmashSearchParams;
 
     funcdef run_sourmash_search(SourmashSearchParams params)
@@ -57,7 +58,6 @@ module kb_sourmash {
         string workspace_name;
         string search_db;
         int scaled;
-        boolean containment;
     } SourmashGatherParams;
 
     funcdef run_sourmash_gather(SourmashGatherParams params)
