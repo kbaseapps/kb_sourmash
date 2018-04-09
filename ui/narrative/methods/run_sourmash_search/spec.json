@@ -38,12 +38,28 @@
                 "display": "Genbank"
               },
               {
+                "value": "img_bact_isol",
+                "display": "IMG Bacterial Isolates"
+              },
+              {
                 "value": "img_bact_mags",
                 "display": "IMG Bacterial MAGs"
               },
               {
+                "value": "img_bact_sags",
+                "display": "IMG Bacterial SAGs"
+              },
+              {
                 "value": "img_arch_isol",
                 "display": "IMG Archael Isolates"
+              },
+              {
+                "value": "img_arch_mags",
+                "display": "IMG Archael MAGs"
+              },
+              {
+                "value": "img_arch_sags",
+                "display": "IMG Archael SAGs"
               }
             ]
           }
