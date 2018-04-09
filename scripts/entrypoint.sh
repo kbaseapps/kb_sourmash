@@ -24,6 +24,14 @@ elif [ "${1}" = "init" ] ; then
   tar xzf microbe-genbank-sbt-k31-2017.05.09.tar.gz
   curl -O ftp://ftp.kbase.us/sourmash_data/img_arch_isol.tar.gz
   tar xzf img_arch_isol.tar.gz
+  curl -O ftp://ftp.kbase.us/sourmash_data/img_arch_mags.tar.gz
+  tar xzf img_arch_mags.tar.gz
+  curl -O ftp://ftp.kbase.us/sourmash_data/img_arch_sags.tar.gz
+  tar xzf img_arch_sags.tar.gz
+  curl -O ftp://ftp.kbase.us/sourmash_data/img_bact_isol.tar.gz
+  tar xzf img_bact_isol.tar.gz
+  curl -O ftp://ftp.kbase.us/sourmash_data/img_bact_sags.tar.gz
+  tar xzf img_bact_sags.tar.gz
   curl -O ftp://ftp.kbase.us/sourmash_data/img_bact_mags.tar.gz
   tar xzf img_bact_mags.tar.gz
   if [[ -d ".sbt.genbank-k31" && -d ".sbt.img_arch_isol" && -d ".sbt.img_bact_mags" ]] ; then
