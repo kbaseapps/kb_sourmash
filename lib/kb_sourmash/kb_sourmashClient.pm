@@ -426,7 +426,9 @@ SourmashGatherParams is a reference to a hash where the following keys are defin
 	workspace_name has a value which is a string
 	search_db has a value which is a string
 	scaled has a value which is an int
+	track_abundance has a value which is a kb_sourmash.boolean
 obj_upa is a string
+boolean is an int
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -444,7 +446,9 @@ SourmashGatherParams is a reference to a hash where the following keys are defin
 	workspace_name has a value which is a string
 	search_db has a value which is a string
 	scaled has a value which is an int
+	track_abundance has a value which is a kb_sourmash.boolean
 obj_upa is a string
+boolean is an int
 SourmashResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -814,6 +818,7 @@ input_assembly_upa has a value which is a kb_sourmash.obj_upa
 workspace_name has a value which is a string
 search_db has a value which is a string
 scaled has a value which is an int
+track_abundance has a value which is a kb_sourmash.boolean
 
 </pre>
 
@@ -826,6 +831,7 @@ input_assembly_upa has a value which is a kb_sourmash.obj_upa
 workspace_name has a value which is a string
 search_db has a value which is a string
 scaled has a value which is an int
+track_abundance has a value which is a kb_sourmash.boolean
 
 
 =end text

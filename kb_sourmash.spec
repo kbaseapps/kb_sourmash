@@ -58,6 +58,7 @@ module kb_sourmash {
         string workspace_name;
         string search_db;
         int scaled;
+        boolean track_abundance;
     } SourmashGatherParams;
 
     funcdef run_sourmash_gather(SourmashGatherParams params)

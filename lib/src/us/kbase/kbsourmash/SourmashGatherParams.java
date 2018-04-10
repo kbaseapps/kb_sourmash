@@ -22,7 +22,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "input_assembly_upa",
     "workspace_name",
     "search_db",
-    "scaled"
+    "scaled",
+    "track_abundance"
 })
 public class SourmashGatherParams {
 
@@ -34,6 +35,8 @@ public class SourmashGatherParams {
     private String searchDb;
     @JsonProperty("scaled")
     private Long scaled;
+    @JsonProperty("track_abundance")
+    private Long trackAbundance;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("input_assembly_upa")
@@ -96,6 +99,21 @@ public class SourmashGatherParams {
         return this;
     }
 
+    @JsonProperty("track_abundance")
+    public Long getTrackAbundance() {
+        return trackAbundance;
+    }
+
+    @JsonProperty("track_abundance")
+    public void setTrackAbundance(Long trackAbundance) {
+        this.trackAbundance = trackAbundance;
+    }
+
+    public SourmashGatherParams withTrackAbundance(Long trackAbundance) {
+        this.trackAbundance = trackAbundance;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -108,7 +126,7 @@ public class SourmashGatherParams {
 
     @Override
     public String toString() {
-        return ((((((((((("SourmashGatherParams"+" [inputAssemblyUpa=")+ inputAssemblyUpa)+", workspaceName=")+ workspaceName)+", searchDb=")+ searchDb)+", scaled=")+ scaled)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((("SourmashGatherParams"+" [inputAssemblyUpa=")+ inputAssemblyUpa)+", workspaceName=")+ workspaceName)+", searchDb=")+ searchDb)+", scaled=")+ scaled)+", trackAbundance=")+ trackAbundance)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

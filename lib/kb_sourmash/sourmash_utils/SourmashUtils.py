@@ -126,7 +126,7 @@ class SourmashUtils:
             error_msg += 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output)
             raise ValueError(error_msg)
 
-    def _build_signatures(self, assembly_files_list, scaled):
+    def _build_signatures(self, assembly_files_list, scaled, track_abundance):
         """
         _build_signatures: take list of fasta files, run sourmash compute, save
         output signature file
@@ -134,8 +134,8 @@ class SourmashUtils:
 
         signatures_file = 'signatures'
 
-        compute_command = [self.SOURMASH_COMPUTE, '-k', str(self.KSIZE), '--scaled',
-                           str(scaled), '-o', signatures_file] + assembly_files_list
+        compute_command = [self.SOURMASH_COMPUTE, '-k', str(self.KSIZE), '--scaled', str(scaled),
+                           '-o', signatures_file, track_abundance] + assembly_files_list
 
         self._run_command(" ".join(compute_command))
         return signatures_file
@@ -301,11 +301,22 @@ class SourmashUtils:
         else:
             search_db = self._set_search_db(params['search_db'])
 
+        if 'track_abundance' not in params:
+            params['track_abundance'] = ''
+        elif params['track_abundance'] == 0:
+            params['track_abundance'] = ''
+        elif params['track_abundance'] == 1:
+            params['track_abundance'] = '--track-abundance'
+        else:
+            raise ValueError('track_abundance should be 0 or 1, got '
+                             + str(params['track_abundance']))
+
         os.chdir(self.scratch)
 
         assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
 
-        signature_file = self._build_signatures(assembly_file, params['scaled'])
+        signature_file = self._build_signatures(assembly_file, params['scaled'],
+                                                params['track_abundance'])
 
         # run gather
         gather_command = [self.SOURMASH_GATHER, '-k', str(self.KSIZE), signature_file, search_db]

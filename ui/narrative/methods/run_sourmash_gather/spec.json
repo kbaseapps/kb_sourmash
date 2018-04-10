@@ -74,6 +74,17 @@
             "text_options": {
               "validate_as": "int"
             }
+        },
+        {
+            "id": "track_abundance",
+            "optional": true,
+            "advanced": false,
+            "default_values": [ "0" ],
+            "field_type": "checkbox",
+            "checkbox_options": {
+              "checked_value": 1,
+              "unchecked_value": 0
+            }
         }
     ],
     "behavior": {
@@ -98,6 +109,10 @@
                 {
                     "input_parameter": "scaled",
                     "target_property": "scaled"
+                },
+                {
+                    "input_parameter": "track_abundance",
+                    "target_property": "track_abundance"
                 }
             ],
             "output_mapping": [

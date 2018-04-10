@@ -44,6 +44,11 @@ parameters :
             Scaled
         short-hint : |
             Effective compression ratio to make query signatures
+    track_abundance :
+        ui-name : |
+            Track Abundance?
+        short-hint : |
+            weight each match to a hash value by the multiplicity of the hash value in the query signature
 
 description : |
     <p>Search target sketch database with minhash sketch of input assembly</p>

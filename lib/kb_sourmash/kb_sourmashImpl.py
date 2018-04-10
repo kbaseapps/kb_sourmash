@@ -29,7 +29,7 @@ class kb_sourmash:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "5d0789536154e219991180b98ee634f38a9e9b4c"
+    GIT_COMMIT_HASH = "e18c5e6ceea33098c3ad2ec214a9f4b46b044433"
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -232,7 +232,9 @@ class kb_sourmash:
         :param params: instance of type "SourmashGatherParams" -> structure:
            parameter "input_assembly_upa" of type "obj_upa" (An X/Y/Z style
            workspace object reference), parameter "workspace_name" of String,
-           parameter "search_db" of String, parameter "scaled" of Long
+           parameter "search_db" of String, parameter "scaled" of Long,
+           parameter "track_abundance" of type "boolean" (A boolean - 0 for
+           false, 1 for true. @range (0, 1))
         :returns: instance of type "SourmashResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
