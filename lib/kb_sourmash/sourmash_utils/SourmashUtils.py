@@ -222,13 +222,16 @@ class SourmashUtils:
         if 'scaled' not in params:
             params['scaled'] = 1000
 
+        track_abundance = ''
+
         self._validate_sourmash_compare_params(params)
         os.chdir(self.scratch)
 
         assembly_files_list = self._stage_assembly_files(params.get('object_list'))
 
         # build signatures from fasta files
-        signatures_file = self._build_signatures(assembly_files_list, params['scaled'])
+        signatures_file = self._build_signatures(assembly_files_list, params['scaled'],
+                                                 track_abundance)
 
         # run compare command
         compare_outfile = 'compare.out'
@@ -271,11 +274,13 @@ class SourmashUtils:
         else:
             containment_flag = ''
 
+        track_abundance = ''
+
         os.chdir(self.scratch)
 
         assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
 
-        signature_file = self._build_signatures(assembly_file, params['scaled'])
+        signature_file = self._build_signatures(assembly_file, params['scaled'], track_abundance)
 
         # run search
         search_command = [self.SOURMASH_SEARCH, signature_file, search_db,
