@@ -34,6 +34,15 @@ elif [ "${1}" = "init" ] ; then
   tar xzf img_bact_sags.tar.gz
   curl -O ftp://ftp.kbase.us/sourmash_data/img_bact_mags.tar.gz
   tar xzf img_bact_mags.tar.gz
+  echo '[' > .dotfiles
+  echo '{"name":".sbt.genbank-k31", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.img_arch_isol", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.img_arch_mags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.img_arch_sags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.img_bact_isol", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.img_bact_mags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.img_bact_sags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ']' >> .dotfiles
   if [[ -d ".sbt.genbank-k31" && -d ".sbt.img_arch_isol" && -d ".sbt.img_bact_mags" ]] ; then
     touch __READY__
   else
