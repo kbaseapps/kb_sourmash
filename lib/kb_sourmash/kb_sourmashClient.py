@@ -103,6 +103,35 @@ class kb_sourmash(object):
             'kb_sourmash.run_sourmash_lca_classify',
             [params], self._service_ver, context)
 
+    def run_sourmash_lca_summarize(self, params, context=None):
+        """
+        :param params: instance of type "SourmashLcaSummarizeParams" ->
+           structure: parameter "input_assembly_upa" of type "obj_upa" (An
+           X/Y/Z style workspace object reference), parameter
+           "workspace_name" of String, parameter "lca_search_db" of String,
+           parameter "scaled" of Long
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'kb_sourmash.run_sourmash_lca_summarize',
+            [params], self._service_ver, context)
+
+    def run_sourmash_lca_gather(self, params, context=None):
+        """
+        :param params: instance of type "SourmashLcaGatherParams" ->
+           structure: parameter "input_assembly_upa" of type "obj_upa" (An
+           X/Y/Z style workspace object reference), parameter
+           "workspace_name" of String, parameter "lca_search_db" of String,
+           parameter "track_abundance" of type "boolean" (A boolean - 0 for
+           false, 1 for true. @range (0, 1))
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'kb_sourmash.run_sourmash_lca_gather',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_sourmash.status',
                                         [], self._service_ver, context)

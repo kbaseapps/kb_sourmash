@@ -119,20 +119,32 @@ class kb_sourmashTest(unittest.TestCase):
         self.getImpl().run_sourmash_compare(self.getContext(), params)
         pass
 
-    def test_run_sourmash_search(self):
+    def xtest_run_sourmash_search(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'search_db': 'Ecoli', 'containment':"1"}
         self.getImpl().run_sourmash_search(self.getContext(), params)
         pass
 
-    def test_run_sourmash_gather(self):
+    def xtest_run_sourmash_gather(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'search_db': 'Ecoli'}
         self.getImpl().run_sourmash_gather(self.getContext(), params)
         pass
 
-    def test_run_sourmash_lca_classify(self):
+    def xtest_run_sourmash_lca_classify(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'lca_search_db': 'Genbank'}
         self.getImpl().run_sourmash_lca_classify(self.getContext(), params)
+        pass
+
+    def test_run_sourmash_lca_summarize(self):
+        params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
+                  'lca_search_db': 'Genbank'}
+        self.getImpl().run_sourmash_lca_summarize(self.getContext(), params)
+        pass
+
+    def test_run_sourmash_lca_gather(self):
+        params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
+                  'lca_search_db': 'Genbank'}
+        self.getImpl().run_sourmash_lca_gather(self.getContext(), params)
         pass

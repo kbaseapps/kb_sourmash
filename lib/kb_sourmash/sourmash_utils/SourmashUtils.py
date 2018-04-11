@@ -32,6 +32,8 @@ class SourmashUtils:
     SOURMASH_SEARCH = "sourmash search"
     SOURMASH_GATHER = "sourmash gather"
     SOURMASH_CLASSIFY = "sourmash lca classify"
+    SOURMASH_SUMMARIZE = "sourmash lca summarize"
+    SOURMASH_LCA_GATHER = "sourmash lca gather"
 
     KSIZE = 31
 
@@ -74,6 +76,12 @@ class SourmashUtils:
         for p in ['input_assembly_upa', 'workspace_name', 'lca_search_db']:
             if p not in params:
                 raise ValueError('"{}" parameter is required, but missing'.format(p))
+
+    def _validate_sourmash_lca_summarize_params(self, params):
+        """
+        very simple validation for required paramteres
+        """
+        self._validate_sourmash_lca_classify_params(params)
 
     def _mkdir_p(self, path):
         """
@@ -345,7 +353,7 @@ class SourmashUtils:
         """
         input assembly and classify using lca db return report
         """
-        log('--->\nrunning run_sourmash_gather\nparams:\n{}'.format(json.dumps(params, indent=1)))
+        log('--->\nrunning run_sourmash_lca_classify\nparams:\n{}'.format(json.dumps(params, indent=1)))
 
         self._validate_sourmash_lca_classify_params(params)
 
@@ -369,6 +377,69 @@ class SourmashUtils:
         classify_command = [self.SOURMASH_CLASSIFY, '--query',
                             signature_file, '--db', lca_search_db]
         self._run_command(' '.join(classify_command))
+
+        results = {'report_name': '', 'report_ref': ''}
+        return results
+
+    def run_sourmash_lca_summarize(self, params):
+        """
+        input assembly and summarize taxonomy using lca db returns report
+        """
+        log('--->\nrunning run_sourmash_lca_summarize\nparams:\n{}'.format(json.dumps(params, indent=1)))
+
+        self._validate_sourmash_lca_summarize_params(params)
+
+        if 'scaled' not in params:
+            params['scaled'] = 1000
+
+        if 'lca_search_db' not in params:
+            raise ValueError('lca_search_db parameter is required')
+        elif params['lca_search_db'] == 'Genbank':
+            lca_search_db = "/data/genbank-k31.lca.json"
+        else:
+            raise ValueError('invalid lca_search_db name')
+
+        os.chdir(self.scratch)
+
+        assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
+
+        signature_file = self._build_signatures(assembly_file, params['scaled'],
+                                                params.get('track_abundance', ''))
+
+        summarize_command = [self.SOURMASH_SUMMARIZE, '--scaled', str(params['scaled']),
+                             '--query', signature_file, '--db', lca_search_db]
+        self._run_command(' '.join(summarize_command))
+
+        results = {'report_name': '', 'report_ref': ''}
+        return results
+
+    def run_sourmash_lca_gather(self, params):
+        """
+        input assembly run lca gather and return report
+        """
+        log('--->\nrunning run_sourmash_lca_gather\nparams:\n{}'.format(json.dumps(params, indent=1)))
+
+        self._validate_sourmash_lca_summarize_params(params)
+
+        if 'scaled' not in params:
+            params['scaled'] = 1000
+
+        if 'lca_search_db' not in params:
+            raise ValueError('lca_search_db parameter is required')
+        elif params['lca_search_db'] == 'Genbank':
+            lca_search_db = "/data/genbank-k31.lca.json"
+        else:
+            raise ValueError('invalid lca_search_db name')
+
+        os.chdir(self.scratch)
+
+        assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
+
+        signature_file = self._build_signatures(assembly_file, params['scaled'],
+                                                params.get('track_abundance', ''))
+
+        gather_command = [self.SOURMASH_LCA_GATHER, signature_file, lca_search_db]
+        self._run_command(' '.join(gather_command))
 
         results = {'report_name': '', 'report_ref': ''}
         return results

@@ -610,6 +610,208 @@ SourmashResults is a reference to a hash where the following keys are defined:
     }
 }
  
+
+
+=head2 run_sourmash_lca_summarize
+
+  $results = $obj->run_sourmash_lca_summarize($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_sourmash.SourmashLcaSummarizeParams
+$results is a kb_sourmash.SourmashResults
+SourmashLcaSummarizeParams is a reference to a hash where the following keys are defined:
+	input_assembly_upa has a value which is a kb_sourmash.obj_upa
+	workspace_name has a value which is a string
+	lca_search_db has a value which is a string
+	scaled has a value which is an int
+obj_upa is a string
+SourmashResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_sourmash.SourmashLcaSummarizeParams
+$results is a kb_sourmash.SourmashResults
+SourmashLcaSummarizeParams is a reference to a hash where the following keys are defined:
+	input_assembly_upa has a value which is a kb_sourmash.obj_upa
+	workspace_name has a value which is a string
+	lca_search_db has a value which is a string
+	scaled has a value which is an int
+obj_upa is a string
+SourmashResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub run_sourmash_lca_summarize
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function run_sourmash_lca_summarize (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to run_sourmash_lca_summarize:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'run_sourmash_lca_summarize');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_sourmash.run_sourmash_lca_summarize",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'run_sourmash_lca_summarize',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method run_sourmash_lca_summarize",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'run_sourmash_lca_summarize',
+				       );
+    }
+}
+ 
+
+
+=head2 run_sourmash_lca_gather
+
+  $results = $obj->run_sourmash_lca_gather($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a kb_sourmash.SourmashLcaGatherParams
+$results is a kb_sourmash.SourmashResults
+SourmashLcaGatherParams is a reference to a hash where the following keys are defined:
+	input_assembly_upa has a value which is a kb_sourmash.obj_upa
+	workspace_name has a value which is a string
+	lca_search_db has a value which is a string
+	track_abundance has a value which is a kb_sourmash.boolean
+obj_upa is a string
+boolean is an int
+SourmashResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a kb_sourmash.SourmashLcaGatherParams
+$results is a kb_sourmash.SourmashResults
+SourmashLcaGatherParams is a reference to a hash where the following keys are defined:
+	input_assembly_upa has a value which is a kb_sourmash.obj_upa
+	workspace_name has a value which is a string
+	lca_search_db has a value which is a string
+	track_abundance has a value which is a kb_sourmash.boolean
+obj_upa is a string
+boolean is an int
+SourmashResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub run_sourmash_lca_gather
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function run_sourmash_lca_gather (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to run_sourmash_lca_gather:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'run_sourmash_lca_gather');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "kb_sourmash.run_sourmash_lca_gather",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'run_sourmash_lca_gather',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method run_sourmash_lca_gather",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'run_sourmash_lca_gather',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -653,16 +855,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'run_sourmash_lca_classify',
+                method_name => 'run_sourmash_lca_gather',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method run_sourmash_lca_classify",
+            error => "Error invoking method run_sourmash_lca_gather",
             status_line => $self->{client}->status_line,
-            method_name => 'run_sourmash_lca_classify',
+            method_name => 'run_sourmash_lca_gather',
         );
     }
 }
@@ -968,6 +1170,78 @@ input_assembly_upa has a value which is a kb_sourmash.obj_upa
 workspace_name has a value which is a string
 lca_search_db has a value which is a string
 scaled has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 SourmashLcaSummarizeParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+input_assembly_upa has a value which is a kb_sourmash.obj_upa
+workspace_name has a value which is a string
+lca_search_db has a value which is a string
+scaled has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+input_assembly_upa has a value which is a kb_sourmash.obj_upa
+workspace_name has a value which is a string
+lca_search_db has a value which is a string
+scaled has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 SourmashLcaGatherParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+input_assembly_upa has a value which is a kb_sourmash.obj_upa
+workspace_name has a value which is a string
+lca_search_db has a value which is a string
+track_abundance has a value which is a kb_sourmash.boolean
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+input_assembly_upa has a value which is a kb_sourmash.obj_upa
+workspace_name has a value which is a string
+lca_search_db has a value which is a string
+track_abundance has a value which is a kb_sourmash.boolean
 
 
 =end text

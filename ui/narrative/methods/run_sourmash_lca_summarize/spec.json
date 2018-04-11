@@ -1,0 +1,93 @@
+{
+    "ver": "0.0.1",
+    "authors": [
+        "psdehal"
+    ],
+    "contact": "",
+    "categories": ["active"],
+    "widgets": {
+        "input": null,
+        "output": "no-display"
+    },
+    "parameters": [
+        {
+            "id": "input_assembly_upa",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ "KBaseGenomes.ContigSet","KBaseGenomeAnnotations.Assembly" ]
+            }
+        },
+        {
+            "id": "lca_search_db",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "Genbank" ],
+            "field_type": "dropdown",
+            "dropdown_options":{
+            "options": [
+              {
+                "value": "Genbank",
+                "display": "Genbank"
+              }
+            ]
+          }
+        },
+        {
+            "id": "scaled",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "1000" ],
+            "field_type": "text",
+            "text_options": {
+              "validate_as": "int"
+            }
+        }
+    ],
+    "behavior": {
+        "service-mapping": {
+            "url": "",
+            "name": "kb_sourmash",
+            "method": "run_sourmash_lca_summarize",
+            "input_mapping": [
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                },
+                {
+                    "input_parameter": "input_assembly_upa",
+                    "target_property": "input_assembly_upa",
+                    "target_type_transform": "resolved-ref"
+                },
+                {
+                    "input_parameter": "lca_search_db",
+                    "target_property": "lca_search_db"
+                },
+                {
+                    "input_parameter": "scaled",
+                    "target_property": "scaled"
+                }
+            ],
+            "output_mapping": [
+                {
+                    "service_method_output_path": [0, "report_name"],
+                    "target_property": "report_name"
+                },
+                {
+                    "service_method_output_path": [0, "report_ref"],
+                    "target_property": "report_ref"
+                },
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspaceName"
+                }
+            ]
+        }
+    },
+    "job_id_output_field": "docker"
+}

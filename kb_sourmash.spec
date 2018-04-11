@@ -73,4 +73,24 @@ module kb_sourmash {
 
     funcdef run_sourmash_lca_classify(SourmashLcaClassifyParams params)
         returns (SourmashResults results) authentication required;
+
+    typedef structure {
+        obj_upa input_assembly_upa;
+        string workspace_name;
+        string lca_search_db;
+        int scaled;
+    } SourmashLcaSummarizeParams;
+
+    funcdef run_sourmash_lca_summarize(SourmashLcaSummarizeParams params)
+        returns (SourmashResults results) authentication required;
+
+    typedef structure {
+        obj_upa input_assembly_upa;
+        string workspace_name;
+        string lca_search_db;
+        boolean track_abundance;
+    } SourmashLcaGatherParams;
+
+    funcdef run_sourmash_lca_gather(SourmashLcaGatherParams params)
+        returns (SourmashResults results) authentication required;
 };

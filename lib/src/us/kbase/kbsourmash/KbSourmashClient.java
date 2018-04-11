@@ -247,6 +247,40 @@ public class KbSourmashClient {
         return res.get(0);
     }
 
+    /**
+     * <p>Original spec-file function name: run_sourmash_lca_summarize</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbsourmash.SourmashLcaSummarizeParams SourmashLcaSummarizeParams}
+     * @return   parameter "results" of type {@link us.kbase.kbsourmash.SourmashResults SourmashResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public SourmashResults runSourmashLcaSummarize(SourmashLcaSummarizeParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<SourmashResults>> retType = new TypeReference<List<SourmashResults>>() {};
+        List<SourmashResults> res = caller.jsonrpcCall("kb_sourmash.run_sourmash_lca_summarize", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: run_sourmash_lca_gather</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link us.kbase.kbsourmash.SourmashLcaGatherParams SourmashLcaGatherParams}
+     * @return   parameter "results" of type {@link us.kbase.kbsourmash.SourmashResults SourmashResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public SourmashResults runSourmashLcaGather(SourmashLcaGatherParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<SourmashResults>> retType = new TypeReference<List<SourmashResults>>() {};
+        List<SourmashResults> res = caller.jsonrpcCall("kb_sourmash.run_sourmash_lca_gather", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};

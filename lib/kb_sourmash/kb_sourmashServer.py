@@ -353,6 +353,14 @@ class Application(object):
                              name='kb_sourmash.run_sourmash_lca_classify',
                              types=[dict])
         self.method_authentication['kb_sourmash.run_sourmash_lca_classify'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_sourmash.run_sourmash_lca_summarize,
+                             name='kb_sourmash.run_sourmash_lca_summarize',
+                             types=[dict])
+        self.method_authentication['kb_sourmash.run_sourmash_lca_summarize'] = 'required'  # noqa
+        self.rpc_service.add(impl_kb_sourmash.run_sourmash_lca_gather,
+                             name='kb_sourmash.run_sourmash_lca_gather',
+                             types=[dict])
+        self.method_authentication['kb_sourmash.run_sourmash_lca_gather'] = 'required'  # noqa
         self.rpc_service.add(impl_kb_sourmash.status,
                              name='kb_sourmash.status',
                              types=[dict])

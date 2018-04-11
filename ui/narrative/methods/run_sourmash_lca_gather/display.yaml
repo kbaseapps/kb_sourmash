@@ -1,0 +1,49 @@
+#
+# define display information
+#
+name: Sourmash LCA Gather
+
+tooltip: |
+    Sourmash LCA Gather
+
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar methods that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            []
+        next:
+            []
+    methods:
+        related:
+            []
+        next:
+            []
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    input_assembly_upa :
+        ui-name : |
+            Assembly Name
+        short-hint : |
+            Assembly name
+    lca_search_db :
+        ui-name : |
+            LCA Database
+        short-hint : |
+            LCA Database
+    track_abundance :
+        ui-name : |
+            Track abundance?
+        short-hint : |
+            weight each match to a hash value by the multiplicity of the hash value in the query signature
+
+description : |
+    <p>Search target lca database with minhash sketch of input assembly and summarize taxonomy</p>

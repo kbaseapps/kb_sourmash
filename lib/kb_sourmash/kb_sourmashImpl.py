@@ -29,7 +29,7 @@ class kb_sourmash:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/psdehal/kb_sourmash.git"
-    GIT_COMMIT_HASH = "0e8b683af0136d3611a4c0b36640d75573a2ae4c"
+    GIT_COMMIT_HASH = "f5601c8d17e9b4d9b2641c986c130189c26830e8"
 
     #BEGIN_CLASS_HEADER
     SOURMASH = "sourmash"
@@ -267,7 +267,7 @@ class kb_sourmash:
         # ctx is the context object
         # return variables are: results
         #BEGIN run_sourmash_lca_classify
-        
+
         sourmash_lca_classify_runner = SourmashUtils(self.config)
         results = sourmash_lca_classify_runner.run_sourmash_lca_classify(params)
 
@@ -276,6 +276,59 @@ class kb_sourmash:
         # At some point might do deeper type checking...
         if not isinstance(results, dict):
             raise ValueError('Method run_sourmash_lca_classify return value ' +
+                             'results is not type dict as required.')
+        # return the results
+        return [results]
+
+    def run_sourmash_lca_summarize(self, ctx, params):
+        """
+        :param params: instance of type "SourmashLcaSummarizeParams" ->
+           structure: parameter "input_assembly_upa" of type "obj_upa" (An
+           X/Y/Z style workspace object reference), parameter
+           "workspace_name" of String, parameter "lca_search_db" of String,
+           parameter "scaled" of Long
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        # ctx is the context object
+        # return variables are: results
+        #BEGIN run_sourmash_lca_summarize
+
+        sourmash_lca_summarize_runner = SourmashUtils(self.config)
+        results = sourmash_lca_summarize_runner.run_sourmash_lca_summarize(params)
+
+        #END run_sourmash_lca_summarize
+
+        # At some point might do deeper type checking...
+        if not isinstance(results, dict):
+            raise ValueError('Method run_sourmash_lca_summarize return value ' +
+                             'results is not type dict as required.')
+        # return the results
+        return [results]
+
+    def run_sourmash_lca_gather(self, ctx, params):
+        """
+        :param params: instance of type "SourmashLcaGatherParams" ->
+           structure: parameter "input_assembly_upa" of type "obj_upa" (An
+           X/Y/Z style workspace object reference), parameter
+           "workspace_name" of String, parameter "lca_search_db" of String,
+           parameter "track_abundance" of type "boolean" (A boolean - 0 for
+           false, 1 for true. @range (0, 1))
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        # ctx is the context object
+        # return variables are: results
+        #BEGIN run_sourmash_lca_gather
+
+        sourmash_lca_gather_runner = SourmashUtils(self.config)
+        results = sourmash_lca_gather_runner.run_sourmash_lca_gather(params)
+
+        #END run_sourmash_lca_gather
+
+        # At some point might do deeper type checking...
+        if not isinstance(results, dict):
+            raise ValueError('Method run_sourmash_lca_gather return value ' +
                              'results is not type dict as required.')
         # return the results
         return [results]
