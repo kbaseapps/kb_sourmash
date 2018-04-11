@@ -89,6 +89,20 @@ class kb_sourmash(object):
             'kb_sourmash.run_sourmash_gather',
             [params], self._service_ver, context)
 
+    def run_sourmash_lca_classify(self, params, context=None):
+        """
+        :param params: instance of type "SourmashLcaClassifyParams" ->
+           structure: parameter "input_assembly_upa" of type "obj_upa" (An
+           X/Y/Z style workspace object reference), parameter
+           "workspace_name" of String, parameter "lca_search_db" of String,
+           parameter "scaled" of Long
+        :returns: instance of type "SourmashResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        return self._client.call_method(
+            'kb_sourmash.run_sourmash_lca_classify',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('kb_sourmash.status',
                                         [], self._service_ver, context)

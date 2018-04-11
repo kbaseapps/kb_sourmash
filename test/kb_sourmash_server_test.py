@@ -127,6 +127,12 @@ class kb_sourmashTest(unittest.TestCase):
 
     def test_run_sourmash_gather(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
-                  'search_db': 'Genbank'}
+                  'search_db': 'Ecoli'}
         self.getImpl().run_sourmash_gather(self.getContext(), params)
+        pass
+
+    def test_run_sourmash_lca_classify(self):
+        params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
+                  'lca_search_db': 'Genbank'}
+        self.getImpl().run_sourmash_lca_classify(self.getContext(), params)
         pass

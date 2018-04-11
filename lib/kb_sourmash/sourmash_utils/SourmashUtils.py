@@ -31,6 +31,7 @@ class SourmashUtils:
     SOURMASH_PLOT = "sourmash plot"
     SOURMASH_SEARCH = "sourmash search"
     SOURMASH_GATHER = "sourmash gather"
+    SOURMASH_CLASSIFY = "sourmash lca classify"
 
     KSIZE = 31
 
@@ -63,6 +64,16 @@ class SourmashUtils:
         right now, the params are the same as search
         """
         self._validate_sourmash_search_params(params)
+
+    def _validate_sourmash_lca_classify_params(self, params):
+        """
+        very simple validation for required paramteres
+        """
+        log('Start parameter validation.')
+
+        for p in ['input_assembly_upa', 'workspace_name', 'lca_search_db']:
+            if p not in params:
+                raise ValueError('"{}" parameter is required, but missing'.format(p))
 
     def _mkdir_p(self, path):
         """
@@ -161,7 +172,7 @@ class SourmashUtils:
         elif searchdb_label == "img_arch_sags":
             search_db = "/data/img_arch_sags.sbt.json"
         else:
-            raise ValueError('search_db must be Ecoli or Genbank')
+            raise ValueError('search_db not valid')
 
         return search_db
 
@@ -326,6 +337,38 @@ class SourmashUtils:
         # run gather
         gather_command = [self.SOURMASH_GATHER, '-k', str(self.KSIZE), signature_file, search_db]
         self._run_command(' '.join(gather_command))
+
+        results = {'report_name': '', 'report_ref': ''}
+        return results
+
+    def run_sourmash_lca_classify(self, params):
+        """
+        input assembly and classify using lca db return report
+        """
+        log('--->\nrunning run_sourmash_gather\nparams:\n{}'.format(json.dumps(params, indent=1)))
+
+        self._validate_sourmash_lca_classify_params(params)
+
+        if 'scaled' not in params:
+            params['scaled'] = 1000
+
+        if 'lca_search_db' not in params:
+            raise ValueError('lca_search_db parameter is required')
+        elif params['lca_search_db'] == 'Genbank':
+            lca_search_db = "/data/genbank-k31.lca.json"
+        else:
+            raise ValueError('invalid lca_search_db name')
+
+        os.chdir(self.scratch)
+
+        assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
+
+        signature_file = self._build_signatures(assembly_file, params['scaled'],
+                                                params.get('track_abundance', ''))
+
+        classify_command = [self.SOURMASH_CLASSIFY, '--query',
+                            signature_file, '--db', lca_search_db]
+        self._run_command(' '.join(classify_command))
 
         results = {'report_name': '', 'report_ref': ''}
         return results
