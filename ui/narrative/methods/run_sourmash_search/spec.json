@@ -60,6 +60,10 @@
               {
                 "value": "img_arch_sags",
                 "display": "IMG Archael SAGs"
+              },
+              {
+                "value": "img_metag_metat_no_raw",
+                "display": "IMG Metagenomes & Metatranscriptomes, no raw reads"
               }
             ]
           }
