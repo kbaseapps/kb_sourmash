@@ -34,6 +34,8 @@ elif [ "${1}" = "init" ] ; then
   tar xzf img_bact_sags.tar.gz
   curl -O ftp://ftp.kbase.us/sourmash_data/img_bact_mags.tar.gz
   tar xzf img_bact_mags.tar.gz
+  curl -O ftp://ftp.kbase.us/sourmash_data/img_metag_metat_no_raw.tar.gz
+  tar xzf img_metag_metat_no_raw.tar.gz
   curl -o genbank-k31.lca.json.gz "https://files.osf.io/v1/resources/vk4fa/providers/osfstorage/5a02520e594d90026566b698?action=download&amp;version=1&amp;direct"
   gunzip genbank-k31.lca.json.gz
   echo '[' > .dotfiles
@@ -44,6 +46,7 @@ elif [ "${1}" = "init" ] ; then
   echo ',{"name":".sbt.img_bact_isol", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
   echo ',{"name":".sbt.img_bact_mags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
   echo ',{"name":".sbt.img_bact_sags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.metaG_metaT_no_raw", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
   echo ']' >> .dotfiles
   if [[ -d ".sbt.genbank-k31" && -d ".sbt.img_arch_isol" && -d ".sbt.img_bact_mags" ]] ; then
     touch __READY__

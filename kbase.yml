@@ -2,7 +2,7 @@ module-name:
     kb_sourmash
 
 module-description:
-    KBase sourmash with RefSeq k=31 indexed sketches of ~100k Genbank microbes from 2017-05-09, IMG archael isolates, MAGs and SAGs, and IMG bacterial isolates, MAGs and SAGs. And LCA database Genbank k=31 2017.11.07.
+    KBase sourmash with RefSeq k=31 indexed sketches of ~100k Genbank microbes from 2017-05-09, IMG archael isolates, MAGs and SAGs, IMG bacterial isolates, MAGs and SAGs and IMG metagenomes and metatranscriptomes with no raw reads. And LCA database Genbank k=31 2017.11.07.
 
 service-language:
     python
@@ -14,4 +14,4 @@ owners:
     [psdehal]
 
 data-version:
-    0.3.2
+    0.3.3
