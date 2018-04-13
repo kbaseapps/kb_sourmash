@@ -179,7 +179,7 @@ class SourmashUtils:
             search_db = "/data/img_bact_sags.sbt.json"
         elif searchdb_label == "img_arch_sags":
             search_db = "/data/img_arch_sags.sbt.json"
-        elif search_db == "img_metag_metat_no_raw":
+        elif search_db_label == "img_metag_metat_no_raw":
             search_db = "/data/metaG_metaT_no_raw.sbt.json"
         else:
             raise ValueError('search_db not valid')
