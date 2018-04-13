@@ -433,6 +433,16 @@ class SourmashUtils:
         else:
             raise ValueError('invalid lca_search_db name')
 
+        if 'track_abundance' not in params:
+            params['track_abundance'] = ''
+        elif params['track_abundance'] == 0:
+            params['track_abundance'] = ''
+        elif params['track_abundance'] == 1:
+            params['track_abundance'] = '--track-abundance'
+        else:
+            raise ValueError('track_abundance should be 0 or 1, got '
+                             + str(params['track_abundance']))
+
         os.chdir(self.scratch)
 
         assembly_file = self._stage_assembly_files([params['input_assembly_upa']])
