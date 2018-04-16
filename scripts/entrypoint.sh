@@ -41,7 +41,8 @@ elif [ "${1}" = "init" ] ; then
   curl -o genbank-k31.lca.json.gz "https://files.osf.io/v1/resources/vk4fa/providers/osfstorage/5a02520e594d90026566b698?action=download&amp;version=1&amp;direct"
   gunzip genbank-k31.lca.json.gz
   echo '[' > .dotfiles
-  echo '{"name":".sbt.genbank-k31", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo '{"name":".sbt.kb_refseq_ci_1000.sbt", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
+  echo ',{"name":".sbt.genbank-k31", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
   echo ',{"name":".sbt.img_arch_isol", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
   echo ',{"name":".sbt.img_arch_mags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
   echo ',{"name":".sbt.img_arch_sags", "type":"directory","mtime":"1", "size":1}' >> .dotfiles
