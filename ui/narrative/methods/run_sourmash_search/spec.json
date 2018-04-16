@@ -64,6 +64,10 @@
               {
                 "value": "img_metag_metat_no_raw",
                 "display": "IMG Metagenomes & Metatranscriptomes, no raw reads"
+              },
+              {
+                "value": "kb_refseq_ci_1000",
+                "display": "KBase CI RefSeq first 1000 assemblies"
               }
             ]
           }

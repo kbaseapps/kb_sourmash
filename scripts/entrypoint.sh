@@ -20,6 +20,8 @@ elif [ "${1}" = "init" ] ; then
   echo "Initialize module"
   cd /data
   echo "Getting databases"
+  curl -O ftp://ftp.kbase.us/sourmash_data/kb_refseq_ci_1000.sbt.tgz
+  tar xzf kb_refseq_ci_1000.sbt.tgz
   curl -O https://s3-us-west-1.amazonaws.com/spacegraphcats.ucdavis.edu/microbe-genbank-sbt-k31-2017.05.09.tar.gz
   tar xzf microbe-genbank-sbt-k31-2017.05.09.tar.gz
   curl -O ftp://ftp.kbase.us/sourmash_data/img_arch_isol.tar.gz

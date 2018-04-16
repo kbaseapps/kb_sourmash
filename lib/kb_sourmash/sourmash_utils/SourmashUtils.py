@@ -21,8 +21,7 @@ def log(message, prefix_newline=False):
     """
     Logging function, provides a hook to suppress or redirect log messages.
     """
-    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time())
-          + ': ' + str(message))
+    print(('\n' if prefix_newline else '') + '{0:.2f}'.format(time.time()) + ': ' + str(message))
 
 
 class SourmashUtils:
@@ -35,6 +34,17 @@ class SourmashUtils:
     SOURMASH_CLASSIFY = "sourmash lca classify"
     SOURMASH_SUMMARIZE = "sourmash lca summarize"
     SOURMASH_LCA_GATHER = "sourmash lca gather"
+
+    SEARCH_DBS = {'Ecoli': '/kb/module/test/data/ecolidb.sbt.json',
+                  'Genbank': '/data/genbank-k31.sbt.json',
+                  'img_bact_mags': '/data/img_bact_mags.sbt.json',
+                  'img_arch_isol': '/data/img_arch_isol.sbt.json',
+                  'img_bact_isol': '/data/img_bact_isol.sbt.json',
+                  'img_arch_mags': '/data/img_arch_mags.sbt.json',
+                  'img_bact_sags': '/data/img_bact_sags.sbt.json',
+                  'img_arch_sags': '/data/img_arch_sags.sbt.json',
+                  'img_metag_metat_no_raw': '/data/metaG_metaT_no_raw.sbt.json',
+                  'kb_refseq_ci_1000': 'kb_refseq_ci_1000.sbt.sbt.json'}
 
     KSIZE = 31
 
@@ -115,13 +125,13 @@ class SourmashUtils:
 
         for assembly_upa in object_list:
             try:
-                file = auc.get_assembly_as_fasta({'ref': assembly_upa})['path']
+                file_ = auc.get_assembly_as_fasta({'ref': assembly_upa})['path']
             except AssemblyUtilError as assembly_error:
                 print(str(assembly_error))
                 raise
-            filename = os.path.basename(file).replace('.fa', '')
+            filename = os.path.basename(file_).replace('.fa', '')
             to_upper_command = "awk '{ if ($0 !~ />/) {print toupper($0)} else {print $0} }' " \
-                               + file + ' > tmp.fa ' + '&& mv tmp.fa ' + filename
+                               + file_ + ' > tmp.fa ' + '&& mv tmp.fa ' + filename
             self._run_command(to_upper_command)
             staged_file_list.append(filename)
 
@@ -164,28 +174,10 @@ class SourmashUtils:
         """
         label to search db file path
         """
-        if (searchdb_label == "Ecoli"):
-            search_db = '/kb/module/test/data/ecolidb.sbt.json'
-        elif searchdb_label == "Genbank":
-            search_db = "/data/genbank-k31.sbt.json"
-        elif searchdb_label == "img_bact_mags":
-            search_db = "/data/img_bact_mags.sbt.json"
-        elif searchdb_label == "img_arch_isol":
-            search_db = "/data/img_arch_isol.sbt.json"
-        elif searchdb_label == "img_bact_isol":
-            search_db = "/data/img_bact_isol.sbt.json"
-        elif searchdb_label == "img_arch_mags":
-            search_db = "/data/img_arch_mags.sbt.json"
-        elif searchdb_label == "img_bact_sags":
-            search_db = "/data/img_bact_sags.sbt.json"
-        elif searchdb_label == "img_arch_sags":
-            search_db = "/data/img_arch_sags.sbt.json"
-        elif searchdb_label == "img_metag_metat_no_raw":
-            search_db = "/data/metaG_metaT_no_raw.sbt.json"
-        else:
+        if searchdb_label not in self.SEARCH_DBS:
             raise ValueError('search_db not valid')
-
-        return search_db
+        else:
+            return self.SEARCH_DBS[searchdb_label]
 
     def _generate_report(self, compare_outfile, workspace_name):
         """
@@ -335,8 +327,8 @@ class SourmashUtils:
         elif params['track_abundance'] == 1:
             params['track_abundance'] = '--track-abundance'
         else:
-            raise ValueError('track_abundance should be 0 or 1, got '
-                             + str(params['track_abundance']))
+            raise ValueError('track_abundance should be 0 or 1, got ' +
+                             str(params['track_abundance']))
 
         os.chdir(self.scratch)
 
@@ -356,7 +348,8 @@ class SourmashUtils:
         """
         input assembly and classify using lca db return report
         """
-        log('--->\nrunning run_sourmash_lca_classify\nparams:\n{}'.format(json.dumps(params, indent=1)))
+        log('--->\nrunning run_sourmash_lca_classify\nparams:\n{}'.format(
+            json.dumps(params, indent=1)))
 
         self._validate_sourmash_lca_classify_params(params)
 
@@ -388,7 +381,8 @@ class SourmashUtils:
         """
         input assembly and summarize taxonomy using lca db returns report
         """
-        log('--->\nrunning run_sourmash_lca_summarize\nparams:\n{}'.format(json.dumps(params, indent=1)))
+        log('--->\nrunning run_sourmash_lca_summarize\nparams:\n{}'.format(
+            json.dumps(params, indent=1)))
 
         self._validate_sourmash_lca_summarize_params(params)
 
@@ -420,7 +414,8 @@ class SourmashUtils:
         """
         input assembly run lca gather and return report
         """
-        log('--->\nrunning run_sourmash_lca_gather\nparams:\n{}'.format(json.dumps(params, indent=1)))
+        log('--->\nrunning run_sourmash_lca_gather\nparams:\n{}'.format(
+            json.dumps(params, indent=1)))
 
         self._validate_sourmash_lca_summarize_params(params)
 
@@ -441,8 +436,8 @@ class SourmashUtils:
         elif params['track_abundance'] == 1:
             params['track_abundance'] = '--track-abundance'
         else:
-            raise ValueError('track_abundance should be 0 or 1, got '
-                             + str(params['track_abundance']))
+            raise ValueError('track_abundance should be 0 or 1, got ' +
+                             str(params['track_abundance']))
 
         os.chdir(self.scratch)
 
