@@ -44,7 +44,7 @@ class SourmashUtils:
                   'img_bact_sags': '/data/img_bact_sags.sbt.json',
                   'img_arch_sags': '/data/img_arch_sags.sbt.json',
                   'img_metag_metat_no_raw': '/data/metaG_metaT_no_raw.sbt.json',
-                  'kb_refseq_ci_1000': 'kb_refseq_ci_1000.sbt.sbt.json'}
+                  'kb_refseq_ci_1000': '/data/kb_refseq_ci_1000.sbt.sbt.json'}
 
     KSIZE = 31
 
@@ -151,6 +151,7 @@ class SourmashUtils:
         if (exitCode == 0):
             log('Executed command:\n{}\n'.format(command) +
                 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output))
+            return output
         else:
             error_msg = 'Error running command:\n{}\n'.format(command)
             error_msg += 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output)
@@ -256,7 +257,8 @@ class SourmashUtils:
 
         # make plots
         plot_command = [self.SOURMASH_PLOT, compare_outfile, '--labels']
-        self._run_command(" ".join(plot_command))
+        output = self._run_command(" ".join(plot_command))
+        print 'This is output from the search command:\n[' + output + ']\n'
 
         # make report
 

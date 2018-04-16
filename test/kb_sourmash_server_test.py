@@ -20,6 +20,7 @@ from kb_sourmash.kb_sourmashServer import MethodContext
 from kb_sourmash.authclient import KBaseAuth as _KBaseAuth
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 
+
 class kb_sourmashTest(unittest.TestCase):
 
     @classmethod
@@ -91,7 +92,7 @@ class kb_sourmashTest(unittest.TestCase):
         return self.__class__.ctx
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def xtest_run_sourmash(self):
+    def test_run_sourmash(self):
         # Prepare test objects in workspace if needed using
         # self.getWsClient().save_objects({'workspace': self.getWsName(),
         #                                  'objects': []})
@@ -105,9 +106,8 @@ class kb_sourmashTest(unittest.TestCase):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'search_db': "Ecoli"}
         self.getImpl().run_sourmash(self.getContext(), params)
-        pass
 
-    def xtest_run_sourmash_compare(self):
+    def test_run_sourmash_compare(self):
         tf = 'ecoliMG1655.fa'
         target = os.path.join(self.scratch, tf)
         ref2 = self.au.save_assembly_from_fasta(
@@ -117,34 +117,28 @@ class kb_sourmashTest(unittest.TestCase):
 
         params = {'object_list': [self.ref, ref2], 'workspace_name': self.getWsName()}
         self.getImpl().run_sourmash_compare(self.getContext(), params)
-        pass
 
-    def xtest_run_sourmash_search(self):
+    def test_run_sourmash_search(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
-                  'search_db': 'Ecoli', 'containment':"1"}
+                  'search_db': 'Ecoli', 'containment': "1"}
         self.getImpl().run_sourmash_search(self.getContext(), params)
-        pass
 
-    def xtest_run_sourmash_gather(self):
+    def test_run_sourmash_gather(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'search_db': 'Ecoli'}
         self.getImpl().run_sourmash_gather(self.getContext(), params)
-        pass
 
-    def xtest_run_sourmash_lca_classify(self):
+    def test_run_sourmash_lca_classify(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'lca_search_db': 'Genbank'}
         self.getImpl().run_sourmash_lca_classify(self.getContext(), params)
-        pass
 
     def test_run_sourmash_lca_summarize(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'lca_search_db': 'Genbank'}
         self.getImpl().run_sourmash_lca_summarize(self.getContext(), params)
-        pass
 
     def test_run_sourmash_lca_gather(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'lca_search_db': 'Genbank'}
         self.getImpl().run_sourmash_lca_gather(self.getContext(), params)
-        pass

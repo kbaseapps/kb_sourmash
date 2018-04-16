@@ -56,7 +56,6 @@ class kb_sourmash:
         #END_CONSTRUCTOR
         pass
 
-
     def run_sourmash(self, ctx, params):
         """
         :param params: instance of type "SourmashParams" -> structure:
