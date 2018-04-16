@@ -8,22 +8,6 @@ MAINTAINER KBase Developer
 
 # RUN apt-get update
 
-# Here we install a python coverage tool and an
-# https library that is out of date in the base image.
-
-RUN pip install coverage
-
-# update security libraries in the base image
-RUN pip install cffi --upgrade \
-    && pip install pyopenssl --upgrade \
-    && pip install ndg-httpsclient --upgrade \
-    && pip install pyasn1 --upgrade \
-    && pip install requests --upgrade \
-    && pip install 'requests[security]' --upgrade
-
-
-WORKDIR /kb/module
-
 RUN pip install --upgrade setuptools
 RUN pip install https://github.com/dib-lab/sourmash/archive/master.zip
 
