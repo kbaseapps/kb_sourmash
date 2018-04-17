@@ -331,7 +331,7 @@ class SourmashUtils:
     def _create_link_mapping(self, search_db, ids):
         idmap = {}
         print('search_db: ' + search_db)
-        print('KBASE_DBS: ' + self.KBASE_DBS)
+        print('KBASE_DBS: ' + str(self.KBASE_DBS))
         if search_db in self.KBASE_DBS:
             log('Looking up object names in KBase data stores')
             wsrefs = [{'ref': x.replace('_', '/')} for x in ids]
