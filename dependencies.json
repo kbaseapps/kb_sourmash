@@ -10,4 +10,8 @@
   "module_name" : "KBaseReport",
   "type" : "sdk",
   "version_tag" : "release"
+}, {
+  "module_name" : "Workspace",
+  "type" : "core",
+  "file_path" : "https://ci.kbase.us/services/ws/docs/workspace.spec"
 } ]
