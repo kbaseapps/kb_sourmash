@@ -11,6 +11,7 @@ from KBaseReport.KBaseReportClient import KBaseReport
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from AssemblyUtil.baseclient import ServerError as AssemblyUtilError
 from DataFileUtil.DataFileUtilClient import DataFileUtil
+import csv
 
 
 SOURMASH_COMPUTE = "sourmash compute"
@@ -50,6 +51,8 @@ class SourmashUtils:
 
     def __init__(self, config):
         self.scratch = os.path.abspath(config['scratch'])
+        self.tmp = os.path.join(self.scratch, str(uuid.uuid4()))
+        self._mkdir_p(self.tmp)
         self.callbackURL = os.environ['SDK_CALLBACK_URL']
 
     def _validate_sourmash_compare_params(self, params):
@@ -98,6 +101,7 @@ class SourmashUtils:
         """
         _mkdir_p: make directory for given path
         """
+        # https://stackoverflow.com/a/600612/643675
         if not path:
             return
         try:
@@ -151,7 +155,6 @@ class SourmashUtils:
         if (exitCode == 0):
             log('Executed command:\n{}\n'.format(command) +
                 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output))
-            return output
         else:
             error_msg = 'Error running command:\n{}\n'.format(command)
             error_msg += 'Exit Code: {}\nOutput:\n{}'.format(exitCode, output)
@@ -257,8 +260,7 @@ class SourmashUtils:
 
         # make plots
         plot_command = [self.SOURMASH_PLOT, compare_outfile, '--labels']
-        output = self._run_command(" ".join(plot_command))
-        print 'This is output from the search command:\n[' + output + ']\n'
+        self._run_command(" ".join(plot_command))
 
         # make report
 
@@ -274,6 +276,8 @@ class SourmashUtils:
         """
         log('--->\nrunning run_sourmash_search\n' +
             'params:\n{}'.format(json.dumps(params, indent=1)))
+
+        max_returned = 20
 
         self._validate_sourmash_search_params(params)
 
@@ -299,12 +303,41 @@ class SourmashUtils:
         signature_file = self._build_signatures(assembly_file, params['scaled'], track_abundance)
 
         # run search
+        outpath = os.path.join(self.tmp, 'sourmash_temp_out')
         search_command = [self.SOURMASH_SEARCH, signature_file, search_db,
-                          '-n', str(20), containment_flag]
+                          '-n', str(max_returned), containment_flag, '-o', outpath]
         self._run_command(' '.join(search_command))
+
+        id_to_similarity, ttlcount = self._parse_search_results(outpath, max_returned)
+        print(id_to_similarity)
+        print(len(id_to_similarity))
+        print(ttlcount)
+        # TODO: handle special case of KBase IDs
 
         results = {'report_name': '', 'report_ref': ''}
         return results
+
+    def _parse_search_results(self, results_path, maxcount):
+        lines = self._count_lines(results_path) - 1  # -1 for header
+        id_to_similarity = {}
+
+        with open(results_path, 'rb') as fh:
+            csvfile = csv.DictReader(fh)
+            count = 0
+            for line in csvfile:
+                if count >= maxcount:
+                    break
+                id_to_similarity[line['name']] = float(line['similarity'].strip())
+                count += 1
+        return id_to_similarity, lines
+
+    def _count_lines(self, filename):
+        # https://gist.github.com/zed/0ac760859e614cd03652#file-gistfile1-py-L41
+        out = subprocess.Popen(['wc', '-l', filename],
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.STDOUT
+                               ).communicate()[0]
+        return int(out.partition(b' ')[0])
 
     def run_sourmash_gather(self, params):
         """
