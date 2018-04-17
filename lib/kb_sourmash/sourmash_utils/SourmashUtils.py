@@ -13,6 +13,7 @@ from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from AssemblyUtil.baseclient import ServerError as AssemblyUtilError
 from DataFileUtil.DataFileUtilClient import DataFileUtil as _DFUClient
 from DataFileUtil.baseclient import ServerError as _DFUError
+from Workspace.WorkspaceClient import Workspace as _Workspace
 import csv
 import operator
 
@@ -50,6 +51,8 @@ class SourmashUtils:
                   'img_metag_metat_no_raw': '/data/metaG_metaT_no_raw.sbt.json',
                   'kb_refseq_ci_1000': '/data/kb_refseq_ci_1000.sbt.sbt.json'}
 
+    KBASE_DBS = {'kb_refseq_ci_1000'}
+
     KSIZE = 31
 
     def __init__(self, config):
@@ -57,6 +60,7 @@ class SourmashUtils:
         self.tmp = os.path.join(self.scratch, str(uuid.uuid4()))
         self._mkdir_p(self.tmp)
         self.callbackURL = os.environ['SDK_CALLBACK_URL']
+        self.ws_url = config['workspace-url']
 
     def _validate_sourmash_compare_params(self, params):
         """
@@ -313,21 +317,33 @@ class SourmashUtils:
         self._run_command(' '.join(search_command))
 
         id_to_similarity, ttlcount = self._parse_search_results(outpath, max_returned)
+        id_to_link = self._create_link_mapping(search_db, id_to_similarity.keys())
 
-        report = self._create_search_report(params['workspace_name'], id_to_similarity, ttlcount)
+        report = self._create_search_report(
+            params['workspace_name'], id_to_similarity, id_to_link, ttlcount)
         # TODO: handle special case of KBase IDs
 
         results = {'report_name': report['name'], 'report_ref': report['ref']}
         return results
 
-    def _create_search_report(self, wsname, id_to_similarity, ttlcount):
+    def _create_link_mapping(self, search_db, ids):
+        idmap = {}
+        if search_db in self.KBASE_DBS:
+            wsrefs = [{'ref': x.replace('_', '/')} for x in ids]
+            ws = _Workspace(self.ws_url)
+            # should really catch error and log here, later
+            objs = ws.get_object_info3({'objects': wsrefs})['data']
+            for o in objs:
+                id_ = str(o[6]) + '_' + str(o[0]) + '_' + str(o[4])
+                remote_id = id_.replace('_', '/')
+                idmap[id_] = {'id': o[1], 'link': '/#dataview/' + remote_id}
 
-        outdir = os.path.join(self.tmp, 'search_report')
-        self._mkdir_p(outdir)
+        return idmap
 
+    def _write_search_results(self, outfile, id_to_similarity, id_to_link, ttlcount):
         # change to mustache or something later. Or just rewrite this whole thing since this is
         # a demo
-        with open(os.path.join(outdir, 'index.html'), 'w') as html_file:
+        with open(outfile, 'w') as html_file:
             html_file.write('<html><body>\n')
             html_file.write('<div>Showing {} of {} matches</div>\n'
                             .format(len(id_to_similarity), ttlcount))
@@ -335,21 +351,34 @@ class SourmashUtils:
             html_file.write('<tr><th>ID</th><th>Minhash similarity</th></tr>\n')
             for id_, similarity in sorted(
                     id_to_similarity.items(), key=operator.itemgetter(1), reverse=True):
-                html_file.write('<tr><td>{}</td><td>{}</td>\n'.format(id_, similarity))
+                if id_ in id_to_link:
+                    html_file.write(
+                        '<tr><td><a href="{}" target="_blank">{}</a></td><td>{}</td>\n'.format(
+                            id_to_link[id_]['link'], id_to_link[id_]['id'], similarity))
+                else:
+                    html_file.write('<tr><td>{}</td><td>{}</td>\n'.format(id_, similarity))
             html_file.write('</table>\n')
             html_file.write('</body></html>\n')
 
-        print('Saving Sourmash search report')
+    def _create_search_report(self, wsname, id_to_similarity, id_to_link, ttlcount):
+
+        outdir = os.path.join(self.tmp, 'search_report')
+        self._mkdir_p(outdir)
+
+        self._write_search_results(
+            os.path.join(outdir, 'index.html'), id_to_similarity, id_to_link, ttlcount)
+
+        log('Saving Sourmash search report')
 
         dfu = _DFUClient(self.callbackURL)
         try:
             dfuout = dfu.file_to_shock({'file_path': outdir, 'make_handle': 0, 'pack': 'zip'})
         except _DFUError as dfue:
             # not really any way to test this block
-            self.log('Logging exception loading results to shock')
-            self.log(str(dfue))
+            log('Logging exception loading results to shock')
+            log(str(dfue))
             raise
-        print('saved report to shock node ' + dfuout['shock_id'])
+        log('saved report to shock node ' + dfuout['shock_id'])
         try:
             kbr = KBaseReport(self.callbackURL)
             return kbr.create_extended_report(
@@ -362,8 +391,8 @@ class SourmashUtils:
                  'workspace_name': wsname
                  })
         except _RepError as re:
-            self.log('Logging exception from creating report object')
-            self.log(str(re))
+            log('Logging exception from creating report object')
+            log(str(re))
             # TODO delete shock node
             raise
 
