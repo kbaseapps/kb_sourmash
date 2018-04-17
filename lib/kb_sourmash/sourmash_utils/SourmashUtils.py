@@ -8,10 +8,13 @@ import shutil
 import errno
 
 from KBaseReport.KBaseReportClient import KBaseReport
+from KBaseReport.baseclient import ServerError as _RepError
 from AssemblyUtil.AssemblyUtilClient import AssemblyUtil
 from AssemblyUtil.baseclient import ServerError as AssemblyUtilError
-from DataFileUtil.DataFileUtilClient import DataFileUtil
+from DataFileUtil.DataFileUtilClient import DataFileUtil as _DFUClient
+from DataFileUtil.baseclient import ServerError as _DFUError
 import csv
+import operator
 
 
 SOURMASH_COMPUTE = "sourmash compute"
@@ -183,9 +186,9 @@ class SourmashUtils:
         else:
             return self.SEARCH_DBS[searchdb_label]
 
-    def _generate_report(self, compare_outfile, workspace_name):
+    def _generate_compare_report(self, compare_outfile, workspace_name):
         """
-        _generate_report: uses the basename to add the pngs to the html report
+        _generate_compare_report: uses the basename to add the pngs to the html report
         """
         output_directory = os.path.join(self.scratch, str(uuid.uuid4()))
         self._mkdir_p(output_directory)
@@ -209,7 +212,7 @@ class SourmashUtils:
 
         html_file.close()
 
-        dfu = DataFileUtil(self.callbackURL)
+        dfu = _DFUClient(self.callbackURL)
         shock = dfu.file_to_shock({'file_path': output_directory,
                                   'make_handle': 0, 'pack': 'zip'})
 
@@ -264,7 +267,7 @@ class SourmashUtils:
 
         # make report
 
-        report = self._generate_report(compare_outfile, params['workspace_name'])
+        report = self._generate_compare_report(compare_outfile, params['workspace_name'])
 
         results = {'report_name': report['name'], 'report_ref': report['ref']}
         return results
@@ -279,6 +282,7 @@ class SourmashUtils:
 
         max_returned = 20
 
+        # TODO change workspace name to id
         self._validate_sourmash_search_params(params)
 
         if 'scaled' not in params:
@@ -309,13 +313,59 @@ class SourmashUtils:
         self._run_command(' '.join(search_command))
 
         id_to_similarity, ttlcount = self._parse_search_results(outpath, max_returned)
-        print(id_to_similarity)
-        print(len(id_to_similarity))
-        print(ttlcount)
+
+        report = self._create_search_report(params['workspace_name'], id_to_similarity, ttlcount)
         # TODO: handle special case of KBase IDs
 
-        results = {'report_name': '', 'report_ref': ''}
+        results = {'report_name': report['name'], 'report_ref': report['ref']}
         return results
+
+    def _create_search_report(self, wsname, id_to_similarity, ttlcount):
+
+        outdir = os.path.join(self.tmp, 'search_report')
+        self._mkdir_p(outdir)
+
+        # change to mustache or something later. Or just rewrite this whole thing since this is
+        # a demo
+        with open(os.path.join(outdir, 'index.html'), 'w') as html_file:
+            html_file.write('<html><body>\n')
+            html_file.write('<div>Showing {} of {} matches</div>\n'
+                            .format(len(id_to_similarity), ttlcount))
+            html_file.write('<table>\n')
+            html_file.write('<tr><th>ID</th><th>Minhash similarity</th></tr>\n')
+            for id_, similarity in sorted(
+                    id_to_similarity.items(), key=operator.itemgetter(1), reverse=True):
+                html_file.write('<tr><td>{}</td><td>{}</td>\n'.format(id_, similarity))
+            html_file.write('</table>\n')
+            html_file.write('</body></html>\n')
+
+        print('Saving Sourmash search report')
+
+        dfu = _DFUClient(self.callbackURL)
+        try:
+            dfuout = dfu.file_to_shock({'file_path': outdir, 'make_handle': 0, 'pack': 'zip'})
+        except _DFUError as dfue:
+            # not really any way to test this block
+            self.log('Logging exception loading results to shock')
+            self.log(str(dfue))
+            raise
+        print('saved report to shock node ' + dfuout['shock_id'])
+        try:
+            kbr = KBaseReport(self.callbackURL)
+            return kbr.create_extended_report(
+                {'direct_html_link_index': 0,
+                 'html_links': [{'shock_id': dfuout['shock_id'],
+                                 'name': 'index.html',
+                                 'label': 'Sourmash search results'}
+                                ],
+                 'report_object_name': 'kb_sourmash_report_' + str(uuid.uuid4()),
+                 'workspace_name': wsname
+                 })
+        except _RepError as re:
+            self.log('Logging exception from creating report object')
+            self.log(str(re))
+            # TODO delete shock node
+            raise
 
     def _parse_search_results(self, results_path, maxcount):
         lines = self._count_lines(results_path) - 1  # -1 for header
@@ -327,7 +377,7 @@ class SourmashUtils:
             for line in csvfile:
                 if count >= maxcount:
                     break
-                id_to_similarity[line['name']] = float(line['similarity'].strip())
+                id_to_similarity[line['name'].strip()] = float(line['similarity'].strip())
                 count += 1
         return id_to_similarity, lines
 
