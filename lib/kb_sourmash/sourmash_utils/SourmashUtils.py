@@ -339,7 +339,7 @@ class SourmashUtils:
             wsrefs = [{'ref': x.replace('_', '/')} for x in ids]
             ws = _Workspace(self.ws_url)
             # should really catch error and log here, later
-            objs = ws.get_object_info3({'objects': wsrefs})['data']
+            objs = ws.get_object_info3({'objects': wsrefs})['infos']
             for o in objs:
                 id_ = str(o[6]) + '_' + str(o[0]) + '_' + str(o[4])
                 remote_id = id_.replace('_', '/')
