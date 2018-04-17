@@ -121,7 +121,7 @@ class kb_sourmashTest(unittest.TestCase):
     def test_run_sourmash_search(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
                   'search_db': 'Ecoli', 'containment': "1"}
-        self.getImpl().run_sourmash_search(self.getContext(), params)
+        print(self.getImpl().run_sourmash_search(self.getContext(), params))
 
     def test_run_sourmash_gather(self):
         params = {'input_assembly_upa': self.ref, 'workspace_name': self.getWsName(),
