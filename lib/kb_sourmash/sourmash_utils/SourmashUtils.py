@@ -328,19 +328,38 @@ class SourmashUtils:
         results = {'report_name': report['name'], 'report_ref': report['ref']}
         return results
 
+    def _to_upa(self, objinfo, sep='/'):
+        return str(objinfo[6]) + sep + str(objinfo[0]) + sep + str(objinfo[4])
+
     def _create_link_mapping(self, search_db, ids):
         idmap = {}
         if search_db in self.KBASE_DBS:
-            log('Looking up object names in KBase data stores')
+            log('Looking up object names and scientific names in KBase data stores')
             wsrefs = [{'ref': x.replace('_', '/')} for x in ids]
             ws = _Workspace(self.ws_url)
-            # should really catch error and log here, later
-            objs = ws.get_object_info3({'objects': wsrefs})['infos']
+            # should really catch error and log here, later. Same below for taxa lookup
+            objs = ws.get_objects2({'objects': wsrefs, 'no_data': 1})['data']
+            id_to_name = {}
+            id_to_taxon_upa = {}
             for o in objs:
-                id_ = str(o[6]) + '_' + str(o[0]) + '_' + str(o[4])
-                remote_id = id_.replace('_', '/')
-                idmap[id_] = {'id': o[1], 'link': '/#dataview/' + remote_id}
-
+                id_ = self._to_upa(o['info'], '_')
+                id_to_name[id_] = o[1]
+                id_to_taxon_upa[id_] = o['refs'][0]
+            taxrefs = [{'ref': x} for x in id_to_taxon_upa.values()]
+            # 1) Really should use a reference path here, but since the taxons are public skip
+            # 2) The taxon objects should have the scientific name in the metadata so the entire
+            #    object doesn't need to be fetched. At least the taxa objects are small.
+            # 3) Should use DFU for getting objects
+            # 4) This code is a Very Bad Example of how to do things, basically
+            upa_to_sci_name = {}
+            taxobjs = ws.get_objects2({'objects': taxrefs})['data']
+            for t in taxobjs:
+                upa = self._to_upa(t['info'])
+                upa_to_sci_name[upa] = t['data']['scientific_name']
+            for id_ in id_to_name.keys():
+                idmap[id_] = {'id': '{} ({})'.format(
+                                    id_to_name[id_], upa_to_sci_name[id_to_taxon_upa[id_]]),
+                              'link': '/#dataview/' + id_.replace('_', '/')}
         return idmap
 
     def _write_search_results(self, outfile, id_to_similarity, id_to_link, ttlcount):
