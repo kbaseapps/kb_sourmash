@@ -320,8 +320,6 @@ class SourmashUtils:
 
         id_to_similarity, ttlcount = self._parse_search_results(outpath, max_returned)
         id_to_link = self._create_link_mapping(search_db, id_to_similarity.keys())
-        print('id_to_link')
-        print(id_to_link)
 
         report = self._create_search_report(
             params['workspace_name'], id_to_similarity, id_to_link, ttlcount)
@@ -332,8 +330,6 @@ class SourmashUtils:
 
     def _create_link_mapping(self, search_db, ids):
         idmap = {}
-        print('search_db: ' + search_db)
-        print('KBASE_DBS: ' + str(self.KBASE_DBS))
         if search_db in self.KBASE_DBS:
             log('Looking up object names in KBase data stores')
             wsrefs = [{'ref': x.replace('_', '/')} for x in ids]
@@ -358,7 +354,6 @@ class SourmashUtils:
             html_file.write('<tr><th>ID</th><th>Minhash similarity</th></tr>\n')
             for id_, similarity in sorted(
                     id_to_similarity.items(), key=operator.itemgetter(1), reverse=True):
-                print('id_: ' + id_)
                 if id_ in id_to_link:
                     html_file.write(
                         '<tr><td><a href="{}" target="_blank">{}</a></td><td>{}</td>\n'.format(
