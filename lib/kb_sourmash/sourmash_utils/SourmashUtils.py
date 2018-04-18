@@ -343,7 +343,7 @@ class SourmashUtils:
             id_to_taxon_upa = {}
             for o in objs:
                 id_ = self._to_upa(o['info'], '_')
-                id_to_name[id_] = o[1]
+                id_to_name[id_] = o['info'][1]
                 id_to_taxon_upa[id_] = o['refs'][0]
             taxrefs = [{'ref': x} for x in id_to_taxon_upa.values()]
             # 1) Really should use a reference path here, but since the taxons are public skip
