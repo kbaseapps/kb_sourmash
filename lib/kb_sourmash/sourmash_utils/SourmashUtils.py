@@ -43,7 +43,7 @@ class SourmashUtils:
     KBASE_CI_1000_DB = '/data/kb_refseq_ci_1000.sbt.sbt.json'
 
     SEARCH_DBS = {'Ecoli': '/kb/module/test/data/ecolidb.sbt.json',
-                  'Genbank': '/data/genbank-k31.sbt.json',
+                  'Genbank': '/data/genbank-d2-k31.sbt.json',
                   'img_bact_mags': '/data/img_bact_mags.sbt.json',
                   'img_arch_isol': '/data/img_arch_isol.sbt.json',
                   'img_bact_isol': '/data/img_bact_isol.sbt.json',
